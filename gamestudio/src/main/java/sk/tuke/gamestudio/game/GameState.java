@@ -12,6 +12,8 @@ public enum GameState implements Serializable {
 	/** Game solved. */
 	SOLVED,
 	
-	FAILED
+	FAILED,
+	
+	EXIT
 
 }

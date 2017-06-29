@@ -39,16 +39,8 @@ public class ConsoleUIKamene implements GameUserInterface {
 	private FieldKamene field;
 
 	/** Current date */
-	// private Date date = new Date(Calendar.getInstance().getTime().getTime());
 
 	private DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
-	@Autowired
-	ScoreServiceJDBC scoreService;
-	@Autowired
-	CommentServiceJDBC commentService;
-	@Autowired
-	RatingServiceJDBC ratingService;
 
 	int moveCounter = 1;
 
@@ -76,7 +68,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 	 * Creates a new playing field.
 	 */
 	@Override
-	public void newGameStarted() {
+	public Score newGameStarted() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Let's play a game,").append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
@@ -91,49 +83,14 @@ public class ConsoleUIKamene implements GameUserInterface {
 		if (field.getGameState() == GameState.SOLVED) {
 			System.out.println("Congratulations! You have won :)");
 			update();
+
 			Score score = new Score(System.getProperty("user.name"), "kamene",
 					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
-			try {
-				scoreService.addScore(score);
-			} catch (ScoreException e) {
-				e.getMessage();
-			}
-
-			try {
-				System.out.println(scoreService.getBestScores("kamene").toString());
-			} catch (ScoreException e) {
-				e.getMessage();
-			}
-			try {
-				commentOption();
-			} catch (WrongFormatException e) {
-				e.getMessage();
-			}
-			System.out.println("Other comments: ");
-			try {
-				System.out.println(commentService.getComments("kamene").toString());
-			} catch (CommentException e1) {
-				e1.getMessage();
-			}
-			try {
-				ratingOption();
-			} catch (WrongFormatException e) {
-				e.getMessage();
-			}
-			System.out.println("Average rating:");
-			try {
-				System.out.println(ratingService.getAverageRating("kamene"));
-			} catch (RatingException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Your rating:");
-			try {
-				System.out.println(ratingService.getRating("kamene", System.getProperty("user.name")));
-			} catch (RatingException e) {
-				e.printStackTrace();
-			}
-
+			return score;
+		} else if (field.getGameState() == GameState.EXIT) {
+			System.out.println("You have exited the game");
 		}
+		return null;
 
 	}
 
@@ -178,6 +135,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 		if (input.equals("EXIT")) {
 			field.save();
 			System.out.println("You have exited the game");
+			field.setGameState(GameState.EXIT);
 		} else if (input.equals("NEW")) {
 			Kamene.getInstance().startNewGame();
 		} else if (input.equals("W") || input.equals("UP")) {
@@ -265,54 +223,6 @@ public class ConsoleUIKamene implements GameUserInterface {
 			newGameStarted();
 		} else if (choice.toUpperCase().equals("N")) {
 			Kamene.getInstance().startNewGame();
-		} else {
-			throw new WrongFormatException("Wrong Input!");
-		}
-
-	}
-
-	private void commentOption() throws WrongFormatException {
-		System.out.println("Would you like to leave a comment? Y/N");
-		String choice = readLine();
-		if (choice.toUpperCase().equals("Y")) {
-			System.out.println("Enter your comment:");
-			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), "kamene", userComment, getSQLCurrentDate());
-			try {
-				commentService.addComment(cmt);
-			} catch (CommentException e) {
-				e.getMessage();
-			}
-		} else if (choice.toUpperCase().equals("N")) {
-			return;
-		} else {
-			throw new WrongFormatException("Wrong Input!");
-		}
-	}
-
-	private void ratingOption() throws WrongFormatException {
-		System.out.println("Would you like to rate the game? Y/N");
-		String choice = readLine();
-
-		if (choice.toUpperCase().equals("Y")) {
-			System.out.println("Enter your rating: (1 for lowest - 5 for highest");
-			String userRating = readLine();
-
-			Pattern pattern = Pattern.compile("[1-5]");
-			Matcher matcher = pattern.matcher(userRating);
-
-			if (matcher.matches()) {
-				Rating rt = new Rating(System.getProperty("user.name"), "kamene", Integer.parseInt(userRating),
-						getSQLCurrentDate());
-				try {
-					ratingService.setRating(rt);
-				} catch (RatingException e) {
-					e.printStackTrace();
-				}
-			}
-
-		} else if (choice.toUpperCase().equals("N")) {
-			return;
 		} else {
 			throw new WrongFormatException("Wrong Input!");
 		}

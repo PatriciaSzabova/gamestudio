@@ -19,48 +19,56 @@ import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
-
 @Configuration
 @SpringBootApplication
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(Main.class, args);
-    }
+	public static void main(String[] args) throws Exception {
+		SpringApplication.run(Main.class, args);
+	}
 
-    @Bean
-    public CommandLineRunner runner(GamestudioUI ui) { return args -> ui.start();}
-    
-    @Bean
-    public GamestudioUI gamestudioUI(){
-    	return new GamestudioUI();
-    }
+	@Bean
+	public CommandLineRunner runner(GamestudioUI ui) {
+		return args -> ui.start();
+	}
 
-    
-    @Bean
-    public ScoreServiceJDBC scoreService(){
-    	return new ScoreServiceJDBC();
-    }
-    
-    @Bean
-    public CommentServiceJDBC commentService(){
-    	return new CommentServiceJDBC();
-    }
-    
-    @Bean
-    public RatingServiceJDBC ratingService(){
-    	return new RatingServiceJDBC();
-    }
-    
-    @Bean
-    public ConsoleUIKamene consoleUIKamene(FieldKamene field) { return new ConsoleUIKamene(field); }
+	@Bean
+	public GamestudioUI gamestudioUI() {
+		return new GamestudioUI();
+	}
 
-    @Bean
-    public FieldKamene fieldStones() { return new FieldKamene(4, 4); }
-    
-    @Bean
-    public ConsoleUIMinesweeper consoleUIMines(FieldMines field) { return new ConsoleUIMinesweeper(field); }
+	@Bean
+	public ScoreServiceJDBC scoreService() {
+		return new ScoreServiceJDBC();
+	}
 
-    @Bean
-    public FieldMines fieldMines() { return new FieldMines(9, 9, 10); }
+	@Bean
+	public CommentServiceJDBC commentService() {
+		return new CommentServiceJDBC();
+	}
+
+	@Bean
+	public RatingServiceJDBC ratingService() {
+		return new RatingServiceJDBC();
+	}
+
+	@Bean
+	public ConsoleUIKamene consoleUIKamene(FieldKamene field) {
+		return new ConsoleUIKamene(field);
+	}
+
+	@Bean
+	public FieldKamene fieldStones() {
+		return new FieldKamene(4, 4);
+	}
+
+	@Bean
+	public ConsoleUIMinesweeper consoleUIMines(FieldMines field) {
+		return new ConsoleUIMinesweeper(field);
+	}
+
+	@Bean
+	public FieldMines fieldMines() {
+		return new FieldMines(9, 9, 20);
+	}
 }

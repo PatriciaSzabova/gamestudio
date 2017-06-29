@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 import sk.tuke.gamestudio.game.minesweeper.Minesweeper;
 import sk.tuke.gamestudio.game.minesweeper.Settings;
 import sk.tuke.gamestudio.game.GameState;
@@ -82,7 +81,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 	 * Field)
 	 */
 	@Override
-	public void newGameStarted() {
+	public Score newGameStarted() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(df.format(getSQLCurrentDate())).append("\n\n").append("Let's play a game,")
 				.append(System.getProperty("user.name")).append("\n");
@@ -103,50 +102,15 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 			update();
 			Score score = new Score(System.getProperty("user.name"), "mines",
 					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
-			try {
-				scoreService.addScore(score);
-			} catch (ScoreException e) {
-				e.getMessage();
-			}
-			try {
-				System.out.println(scoreService.getBestScores("mines").toString());
-			} catch (ScoreException e) {
-				e.getMessage();
-			}
-			try {
-				commentOption();
-			} catch (WrongFormatException e) {
-				e.getMessage();
-			}
-			System.out.println("Other comments: ");
-			try {
-				System.out.println(commentService.getComments("mines").toString());
-			} catch (CommentException e1) {
-				e1.getMessage();
-			}
-			try {
-				ratingOption();
-			} catch (WrongFormatException e) {
-				e.getMessage();
-			}
-			System.out.println("Average rating:");
-			try {
-				System.out.println(ratingService.getAverageRating("mines"));
-			} catch (RatingException e) {
-				e.printStackTrace();
-			}
-			System.out.println("Your rating:");
-			try {
-				System.out.println(ratingService.getRating("mines", System.getProperty("user.name")));
-			} catch (RatingException e) {
-				e.printStackTrace();
-			}
+			return score;
 
 		} else if (field.getState() == GameState.FAILED) {
 			System.out.println("You have FAILED! :(");
-			update();
-
+			update();			
+		}else if(field.getState() == GameState.EXIT){
+			System.out.println("You have exited the game");
 		}
+		return null;
 
 	}
 
@@ -185,8 +149,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		Matcher matcher = pattern.matcher(input);
 
 		if (input.equals("X")) {
-			System.out.println("You have exited the game");
-
+			field.setState(GameState.EXIT);	
 		} else if (matcher.matches()) {
 			int row = matcher.group(2).charAt(0) - 'A';
 			int column = Integer.parseInt(matcher.group(3));

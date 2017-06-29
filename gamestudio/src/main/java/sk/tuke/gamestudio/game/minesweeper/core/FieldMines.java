@@ -74,6 +74,10 @@ public class FieldMines {
 	public Tile getTile(int row, int column) {
 		return tiles[row][column];
 	}
+	
+	public void setState(GameState state) {
+		this.state = state;
+	}
 
 	/**
 	 * Opens tile at specified indices.

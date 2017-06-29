@@ -1,6 +1,7 @@
 package sk.tuke.gamestudio.game;
 
 import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
+import sk.tuke.gamestudio.server.entity.Score;
 
 public interface GameUserInterface {
 
@@ -10,7 +11,7 @@ public interface GameUserInterface {
 	 * @param field
 	 *            field of mines and clues
 	 */
-	void newGameStarted();
+	Score newGameStarted();
 
 	/**
 	 * Updates user interface - prints the field.
