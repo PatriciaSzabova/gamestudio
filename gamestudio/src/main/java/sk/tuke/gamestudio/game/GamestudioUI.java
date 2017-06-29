@@ -64,27 +64,8 @@ public class GamestudioUI {
 	}
 
 	public void start() {
-		System.out.println(allGames.toString());
-		int pickedGameIdx = -1;
-
-		try {
-			pickedGameIdx = processInput() - 1;
-		} catch (WrongFormatException e) {
-			e.getMessage();
-		}
-		String pickedGame = allGames.get(pickedGameIdx).toString();
-		switch (pickedGame) {
-		case "MINESWEEPER":
-			currentGamePlayed = "mines";
-			gameScore = consoleUIMines.newGameStarted();
-			break;
-		case "KAMENE":
-			currentGamePlayed = "kamene";
-			gameScore = consoleUIStones.newGameStarted();
-			break;
-		default:
-			System.out.println("No such game exists");
-		}
+		processInput();
+		
 		if (gameScore != null) {
 			System.out.println("Your score for this game is: " + gameScore);
 			try {
@@ -126,7 +107,7 @@ public class GamestudioUI {
 
 	}
 
-	private int processInput() throws WrongFormatException {
+	private void processInput(){
 		StringBuilder sb = new StringBuilder();
 		sb.append("Pick your game:\n");
 		for (int i = 0; i < allGames.size(); i++) {
@@ -134,22 +115,33 @@ public class GamestudioUI {
 		}
 		sb.append("or press <X> to exit Gamestudio");
 		System.out.println(sb.toString());
-		String input = readLine().toUpperCase();
-		return handleInput(input);
-
+		String input = readLine();		
+		handleInput(input);	
 	}
 
-	private int handleInput(String input) throws WrongFormatException {
-		int numberOfGames = allGames.size();
-		if (input.equals("X")) {
+	private void handleInput(String input) {		
+		
+		if (input.toUpperCase().equals("X")) {
 			System.out.println("You have exited Gamestudio");
 			System.exit(0);
-		} else if (Integer.parseInt(input) <= numberOfGames) {
-			return Integer.parseInt(input);
-		} else {
-			throw new WrongFormatException("Wrong Input!");
+		}else if(Integer.parseInt(input) > allGames.size()-1){
+			System.out.println("No such game exists");
+			processInput();
 		}
-		return 0;
+		String pickedGame = allGames.get(Integer.parseInt(input)-1);
+		switch (pickedGame) {
+		case "MINESWEEPER":
+			currentGamePlayed = "mines";
+			gameScore = consoleUIMines.newGameStarted();
+			break;
+		case "KAMENE":
+			currentGamePlayed = "kamene";
+			gameScore = consoleUIStones.newGameStarted();
+			break;
+		default:
+			System.out.println("No such game exists");		
+		}
+		
 	}
 
 	private void commentOption() throws WrongFormatException {
