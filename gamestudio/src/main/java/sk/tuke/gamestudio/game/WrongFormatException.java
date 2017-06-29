@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.game.kamene.consoleui;
+package sk.tuke.gamestudio.game;
 
 /**
  * Wrong format exception.

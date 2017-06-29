@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Random;
 
+import sk.tuke.gamestudio.game.GameState;
+
 /**
  * Field represents playing field and game logic.
  */
-public class Field {
+public class FieldMines {
 	/**
 	 * Playing field tiles.
 	 */
@@ -43,7 +45,7 @@ public class Field {
 	 * @param mineCount
 	 *            mine count
 	 */
-	public Field(int rowCount, int columnCount, int mineCount) {
+	public FieldMines(int rowCount, int columnCount, int mineCount) {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		this.mineCount = mineCount;

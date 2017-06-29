@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import sk.tuke.gamestudio.game.GameUserInterface;
-import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUI;
-import sk.tuke.gamestudio.game.minesweeper.core.Field;
+import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
+import sk.tuke.gamestudio.game.minesweeper.core.FieldMines;
 import sk.tuke.gamestudio.game.minesweeper.core.Mine;
 
 /**

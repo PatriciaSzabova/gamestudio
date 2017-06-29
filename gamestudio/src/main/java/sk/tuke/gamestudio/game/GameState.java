@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.game.kamene.core;
+package sk.tuke.gamestudio.game;
 
 import java.io.Serializable;
 
@@ -10,6 +10,8 @@ public enum GameState implements Serializable {
 	PLAYING,
 
 	/** Game solved. */
-	SOLVED
+	SOLVED,
+	
+	FAILED
 
 }

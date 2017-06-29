@@ -13,13 +13,13 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import sk.tuke.gamestudio.game.kamene.Kamene;
-import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
+
 import sk.tuke.gamestudio.game.minesweeper.Minesweeper;
 import sk.tuke.gamestudio.game.minesweeper.Settings;
+import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.GameUserInterface;
-import sk.tuke.gamestudio.game.minesweeper.core.Field;
-import sk.tuke.gamestudio.game.minesweeper.core.GameState;
+import sk.tuke.gamestudio.game.WrongFormatException;
+import sk.tuke.gamestudio.game.minesweeper.core.FieldMines;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
 import sk.tuke.gamestudio.server.entity.Comment;
 import sk.tuke.gamestudio.server.entity.Rating;
@@ -34,9 +34,9 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 /**
  * Console user interface.
  */
-public class ConsoleUI implements GameUserInterface {
+public class ConsoleUIMinesweeper implements GameUserInterface {
 	/** Playing field. */
-	private Field field;
+	private FieldMines field;
 
 	// Date date = new Date();
 	// DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -58,7 +58,7 @@ public class ConsoleUI implements GameUserInterface {
 
 	private RandomOpenThread thread = new RandomOpenThread();
 
-	public ConsoleUI(Field field) {
+	public ConsoleUIMinesweeper(FieldMines field) {
 		this.field = field;
 	}
 
@@ -147,7 +147,7 @@ public class ConsoleUI implements GameUserInterface {
 			update();
 
 		}
-		System.exit(0);
+
 	}
 
 	/*
@@ -186,7 +186,7 @@ public class ConsoleUI implements GameUserInterface {
 
 		if (input.equals("X")) {
 			System.out.println("You have exited the game");
-			System.exit(0);
+
 		} else if (matcher.matches()) {
 			int row = matcher.group(2).charAt(0) - 'A';
 			int column = Integer.parseInt(matcher.group(3));
@@ -299,7 +299,7 @@ public class ConsoleUI implements GameUserInterface {
 		}
 	}
 
-	private void openRandomTile(Field field) {
+	private void openRandomTile(FieldMines field) {
 		boolean isValid = false;
 		randomRow = 0;
 		randomCol = 0;

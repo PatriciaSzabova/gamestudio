@@ -1,7 +1,6 @@
 package sk.tuke.gamestudio.game;
 
-import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
-import sk.tuke.gamestudio.game.kamene.core.Field;
+import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
 
 public interface GameUserInterface {
 

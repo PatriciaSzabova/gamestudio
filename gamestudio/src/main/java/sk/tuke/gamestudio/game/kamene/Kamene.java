@@ -1,9 +1,9 @@
 package sk.tuke.gamestudio.game.kamene;
 
 import sk.tuke.gamestudio.game.GameUserInterface;
-import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUI;
-import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
-import sk.tuke.gamestudio.game.kamene.core.Field;
+import sk.tuke.gamestudio.game.WrongFormatException;
+import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
+import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
 import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
 
 /**
@@ -48,7 +48,7 @@ public class Kamene {
 		}
 
 		settings = this.getSettings();
-		Field field = new Field(settings.getRowCount(), settings.getColumnCount());
+		FieldKamene field = new FieldKamene(settings.getRowCount(), settings.getColumnCount());
 		startMillis = System.currentTimeMillis();
 		userInterface.newGameStarted();
 	}

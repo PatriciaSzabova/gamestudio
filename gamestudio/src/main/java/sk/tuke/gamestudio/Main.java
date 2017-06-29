@@ -6,11 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import sk.tuke.gamestudio.game.GamestudioUI;
+
 //import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUI;
 //import sk.tuke.gamestudio.game.minesweeper.core.Field;
 
-import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUI;
-import sk.tuke.gamestudio.game.kamene.core.Field;
+import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
+import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
+import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
+import sk.tuke.gamestudio.game.minesweeper.core.FieldMines;
 import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
@@ -25,13 +29,13 @@ public class Main {
     }
 
     @Bean
-    public CommandLineRunner runner(ConsoleUI ui) { return args -> ui.newGameStarted();}
-
+    public CommandLineRunner runner(GamestudioUI ui) { return args -> ui.start();}
+    
     @Bean
-    public ConsoleUI consoleUI(Field field) { return new ConsoleUI(field); }
+    public GamestudioUI gamestudioUI(){
+    	return new GamestudioUI();
+    }
 
-    @Bean
-    public Field field() { return new Field(9, 9); }
     
     @Bean
     public ScoreServiceJDBC scoreService(){
@@ -47,4 +51,16 @@ public class Main {
     public RatingServiceJDBC ratingService(){
     	return new RatingServiceJDBC();
     }
+    
+    @Bean
+    public ConsoleUIKamene consoleUIKamene(FieldKamene field) { return new ConsoleUIKamene(field); }
+
+    @Bean
+    public FieldKamene fieldStones() { return new FieldKamene(4, 4); }
+    
+    @Bean
+    public ConsoleUIMinesweeper consoleUIMines(FieldMines field) { return new ConsoleUIMinesweeper(field); }
+
+    @Bean
+    public FieldMines fieldMines() { return new FieldMines(9, 9, 10); }
 }

@@ -15,12 +15,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.kamene.Settings;
 
 /**
  * Field represents playing field and game logic.
  */
-public class Field implements Serializable {
+public class FieldKamene implements Serializable {
 
 	/**
 	 * Playing field tiles.
@@ -66,7 +67,7 @@ public class Field implements Serializable {
 	 * @param columnCount
 	 *            column count
 	 */
-	public Field(int rowCount, int columnCount) {
+	public FieldKamene(int rowCount, int columnCount) {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		tiles = new Tile[rowCount][columnCount];
@@ -81,7 +82,7 @@ public class Field implements Serializable {
 	 * @param settings
 	 *            field settings
 	 */
-	public Field(Settings settings) {
+	public FieldKamene(Settings settings) {
 		this.rowCount = settings.getRowCount();
 		this.columnCount = settings.getColumnCount();
 		tiles = new Tile[rowCount][columnCount];
@@ -239,10 +240,10 @@ public class Field implements Serializable {
 	 * 
 	 * @return field
 	 */
-	public static Field load() {
-		Field field = null;
+	public static FieldKamene load() {
+		FieldKamene field = null;
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(LAST_GAME_STATUS_FILE))) {
-			field = (Field) input.readObject();
+			field = (FieldKamene) input.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

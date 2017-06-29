@@ -13,11 +13,12 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.GameUserInterface;
+import sk.tuke.gamestudio.game.WrongFormatException;
 import sk.tuke.gamestudio.game.kamene.Kamene;
 import sk.tuke.gamestudio.game.kamene.Settings;
-import sk.tuke.gamestudio.game.kamene.core.Field;
-import sk.tuke.gamestudio.game.kamene.core.GameState;
+import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
 import sk.tuke.gamestudio.server.entity.Comment;
 import sk.tuke.gamestudio.server.entity.Rating;
@@ -32,10 +33,10 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 /**
  * Console user interface.
  */
-public class ConsoleUI implements GameUserInterface {
+public class ConsoleUIKamene implements GameUserInterface {
 
 	/** Playing field. */
-	private Field field;
+	private FieldKamene field;
 
 	/** Current date */
 	// private Date date = new Date(Calendar.getInstance().getTime().getTime());
@@ -54,7 +55,7 @@ public class ConsoleUI implements GameUserInterface {
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-	public ConsoleUI(Field field) {
+	public ConsoleUIKamene(FieldKamene field) {
 		this.field = field;
 	}
 
@@ -131,7 +132,7 @@ public class ConsoleUI implements GameUserInterface {
 			} catch (RatingException e) {
 				e.printStackTrace();
 			}
-			System.exit(0);
+
 		}
 
 	}
@@ -177,12 +178,6 @@ public class ConsoleUI implements GameUserInterface {
 		if (input.equals("EXIT")) {
 			field.save();
 			System.out.println("You have exited the game");
-			try {
-				System.out.println(scoreService.getBestScores("kamene").toString());
-			} catch (ScoreException e) {
-				e.getMessage();
-			}
-			System.exit(0);
 		} else if (input.equals("NEW")) {
 			Kamene.getInstance().startNewGame();
 		} else if (input.equals("W") || input.equals("UP")) {
