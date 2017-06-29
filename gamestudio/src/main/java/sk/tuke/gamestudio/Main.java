@@ -8,9 +8,6 @@ import org.springframework.context.annotation.Configuration;
 
 import sk.tuke.gamestudio.game.GamestudioUI;
 
-//import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUI;
-//import sk.tuke.gamestudio.game.minesweeper.core.Field;
-
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;

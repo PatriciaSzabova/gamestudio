@@ -5,8 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +33,7 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
 public class GamestudioUI {
 
-	private Games[] allGames;
+	private List<String> allGames;
 	@Autowired
 	private ScoreServiceJDBC scoreService;
 	@Autowired
@@ -47,7 +52,7 @@ public class GamestudioUI {
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
 	public GamestudioUI() {
-		allGames = Games.values();
+		allGames = Arrays.stream(Games.values()).map(Games::name).collect(Collectors.toList());
 	}
 
 	private String readLine() {
@@ -59,6 +64,7 @@ public class GamestudioUI {
 	}
 
 	public void start() {
+		System.out.println(allGames.toString());
 		int pickedGameIdx = -1;
 
 		try {
@@ -66,13 +72,13 @@ public class GamestudioUI {
 		} catch (WrongFormatException e) {
 			e.getMessage();
 		}
-		String pickedGame = allGames[pickedGameIdx].toString();
+		String pickedGame = allGames.get(pickedGameIdx).toString();
 		switch (pickedGame) {
-		case "Minesweeper":
+		case "MINESWEEPER":
 			currentGamePlayed = "mines";
 			gameScore = consoleUIMines.newGameStarted();
 			break;
-		case "Kamene":
+		case "KAMENE":
 			currentGamePlayed = "kamene";
 			gameScore = consoleUIStones.newGameStarted();
 			break;
@@ -123,8 +129,8 @@ public class GamestudioUI {
 	private int processInput() throws WrongFormatException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Pick your game:\n");
-		for (int i = 0; i < allGames.length; i++) {
-			sb.append(i + 1).append(". ").append(allGames[i]).append("\n");
+		for (int i = 0; i < allGames.size(); i++) {
+			sb.append(i + 1).append(". ").append(allGames.get(i)).append("\n");
 		}
 		sb.append("or press <X> to exit Gamestudio");
 		System.out.println(sb.toString());
@@ -134,7 +140,7 @@ public class GamestudioUI {
 	}
 
 	private int handleInput(String input) throws WrongFormatException {
-		int numberOfGames = allGames.length;
+		int numberOfGames = allGames.size();
 		if (input.equals("X")) {
 			System.out.println("You have exited Gamestudio");
 			System.exit(0);

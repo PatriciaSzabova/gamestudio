@@ -35,6 +35,7 @@ public class Kamene {
 		// } catch (WrongFormatException e) {
 		// e.getMessage();
 		// }
+		startMillis = System.currentTimeMillis();
 	}
 
 	/**
@@ -48,8 +49,7 @@ public class Kamene {
 		}
 
 		settings = this.getSettings();
-		FieldKamene field = new FieldKamene(settings.getRowCount(), settings.getColumnCount());
-		startMillis = System.currentTimeMillis();
+		FieldKamene field = new FieldKamene(settings.getRowCount(), settings.getColumnCount());		
 		userInterface.newGameStarted();
 	}
 

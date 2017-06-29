@@ -48,13 +48,6 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 	private int randomRow;
 	private int randomCol;
 
-	@Autowired
-	ScoreServiceJDBC scoreService;
-	@Autowired
-	CommentServiceJDBC commentService;
-	@Autowired
-	RatingServiceJDBC ratingService;
-
 	private RandomOpenThread thread = new RandomOpenThread();
 
 	public ConsoleUIMinesweeper(FieldMines field) {
@@ -106,8 +99,8 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 
 		} else if (field.getState() == GameState.FAILED) {
 			System.out.println("You have FAILED! :(");
-			update();			
-		}else if(field.getState() == GameState.EXIT){
+			update();
+		} else if (field.getState() == GameState.EXIT) {
 			System.out.println("You have exited the game");
 		}
 		return null;
@@ -149,7 +142,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		Matcher matcher = pattern.matcher(input);
 
 		if (input.equals("X")) {
-			field.setState(GameState.EXIT);	
+			field.setState(GameState.EXIT);
 		} else if (matcher.matches()) {
 			int row = matcher.group(2).charAt(0) - 'A';
 			int column = Integer.parseInt(matcher.group(3));
@@ -213,53 +206,6 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 			break;
 		}
 
-	}
-
-	private void commentOption() throws WrongFormatException {
-		System.out.println("Would you like to leave a comment? Y/N");
-		String choice = readLine();
-		if (choice.toUpperCase().equals("Y")) {
-			System.out.println("Enter your comment:");
-			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), "mines", userComment, getSQLCurrentDate());
-			try {
-				commentService.addComment(cmt);
-			} catch (CommentException e) {
-				e.getMessage();
-			}
-		} else if (choice.toUpperCase().equals("N")) {
-			return;
-		} else {
-			throw new WrongFormatException("Wrong Input!");
-		}
-	}
-
-	private void ratingOption() throws WrongFormatException {
-		System.out.println("Would you like to rate the game? Y/N");
-		String choice = readLine();
-
-		if (choice.toUpperCase().equals("Y")) {
-			System.out.println("Enter your rating: (1 for lowest - 5 for highest");
-			String userRating = readLine();
-
-			Pattern pattern = Pattern.compile("[1-5]");
-			Matcher matcher = pattern.matcher(userRating);
-
-			if (matcher.matches()) {
-				Rating rt = new Rating(System.getProperty("user.name"), "mines", Integer.parseInt(userRating),
-						getSQLCurrentDate());
-				try {
-					ratingService.setRating(rt);
-				} catch (RatingException e) {
-					e.printStackTrace();
-				}
-			}
-
-		} else if (choice.toUpperCase().equals("N")) {
-			return;
-		} else {
-			throw new WrongFormatException("Wrong Input!");
-		}
 	}
 
 	private void openRandomTile(FieldMines field) {

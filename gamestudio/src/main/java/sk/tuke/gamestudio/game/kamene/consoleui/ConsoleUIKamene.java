@@ -134,7 +134,6 @@ public class ConsoleUIKamene implements GameUserInterface {
 
 		if (input.equals("EXIT")) {
 			field.save();
-			System.out.println("You have exited the game");
 			field.setGameState(GameState.EXIT);
 		} else if (input.equals("NEW")) {
 			Kamene.getInstance().startNewGame();
