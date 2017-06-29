@@ -1,9 +1,9 @@
-package sk.tuke.gamestudio.game.kamene;
+package sk.tuke.gamestudio.game;
 
 import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 
-public interface UserInterface {
+public interface GameUserInterface {
 
 	/**
 	 * Starts the game.

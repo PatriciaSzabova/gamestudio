@@ -11,11 +11,13 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import sk.tuke.gamestudio.game.kamene.Kamene;
 import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
 import sk.tuke.gamestudio.game.minesweeper.Minesweeper;
 import sk.tuke.gamestudio.game.minesweeper.Settings;
-import sk.tuke.gamestudio.game.minesweeper.UserInterface;
+import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.GameState;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
@@ -32,16 +34,14 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 /**
  * Console user interface.
  */
-public class ConsoleUI implements UserInterface {
+public class ConsoleUI implements GameUserInterface {
 	/** Playing field. */
 	private Field field;
 
 	// Date date = new Date();
 	// DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
-	java.util.Date utilDate = new java.util.Date();
-	java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+	private DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -49,9 +49,12 @@ public class ConsoleUI implements UserInterface {
 	private int randomRow;
 	private int randomCol;
 
-	ScoreServiceJDBC scoreService = new ScoreServiceJDBC();
-	CommentServiceJDBC commentService = new CommentServiceJDBC();
-	RatingServiceJDBC ratingService = new RatingServiceJDBC();
+	@Autowired
+	ScoreServiceJDBC scoreService;
+	@Autowired
+	CommentServiceJDBC commentService;
+	@Autowired
+	RatingServiceJDBC ratingService;
 
 	private RandomOpenThread thread = new RandomOpenThread();
 
@@ -81,7 +84,7 @@ public class ConsoleUI implements UserInterface {
 	@Override
 	public void newGameStarted() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(df.format(utilDate)).append("\n\n").append("Let's play a game,")
+		sb.append(df.format(getSQLCurrentDate())).append("\n\n").append("Let's play a game,")
 				.append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
 		synchronized (this) {
@@ -99,7 +102,7 @@ public class ConsoleUI implements UserInterface {
 			System.out.println("Congratulations! You have WON! :D ");
 			update();
 			Score score = new Score(System.getProperty("user.name"), "mines",
-					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), sqlDate);
+					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
 			try {
 				scoreService.addScore(score);
 			} catch (ScoreException e) {
@@ -206,7 +209,7 @@ public class ConsoleUI implements UserInterface {
 	}
 
 	@Override
-	public void chooseDifficulty() {
+	public void choseFieldSize() throws WrongFormatException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Chose your game difficulty: \n").append("1. BEGINNER \n").append("2. INTERMEDIATE \n")
 				.append("3. EXPERT \n").append("4. CUSTOM \n").append("5. LOAD LAST PLAYED SETTNG");
@@ -236,12 +239,17 @@ public class ConsoleUI implements UserInterface {
 			Minesweeper.getInstance().setSettings(new Settings(rowCount, columnCount, mineCount));
 			break;
 		case 5:
-			Minesweeper.getInstance().setSettings(Settings.load());
+			try {
+				loadLastField();
+			} catch (WrongFormatException e) {
+				e.printStackTrace();
+			}
 			break;
 		default:
 			System.out.println("Wrong input");
 			break;
 		}
+
 	}
 
 	private void commentOption() throws WrongFormatException {
@@ -250,7 +258,7 @@ public class ConsoleUI implements UserInterface {
 		if (choice.toUpperCase().equals("Y")) {
 			System.out.println("Enter your comment:");
 			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), "mines", userComment, sqlDate);
+			Comment cmt = new Comment(System.getProperty("user.name"), "mines", userComment, getSQLCurrentDate());
 			try {
 				commentService.addComment(cmt);
 			} catch (CommentException e) {
@@ -276,7 +284,7 @@ public class ConsoleUI implements UserInterface {
 
 			if (matcher.matches()) {
 				Rating rt = new Rating(System.getProperty("user.name"), "mines", Integer.parseInt(userRating),
-						sqlDate);
+						getSQLCurrentDate());
 				try {
 					ratingService.setRating(rt);
 				} catch (RatingException e) {
@@ -305,6 +313,16 @@ public class ConsoleUI implements UserInterface {
 			}
 
 		} while (isValid = false);
+	}
+
+	@Override
+	public void loadLastField() throws WrongFormatException {
+		Minesweeper.getInstance().setSettings(Settings.load());
+
+	}
+
+	private java.sql.Date getSQLCurrentDate() {
+		return new java.sql.Date(new Date().getTime());
 	}
 
 	private class RandomOpenThread extends Thread {

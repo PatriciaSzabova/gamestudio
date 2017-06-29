@@ -11,9 +11,11 @@ import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.kamene.Kamene;
 import sk.tuke.gamestudio.game.kamene.Settings;
-import sk.tuke.gamestudio.game.kamene.UserInterface;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.GameState;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
@@ -30,29 +32,29 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 /**
  * Console user interface.
  */
-public class ConsoleUI implements UserInterface {
+public class ConsoleUI implements GameUserInterface {
 
 	/** Playing field. */
 	private Field field;
 
 	/** Current date */
 	// private Date date = new Date(Calendar.getInstance().getTime().getTime());
-	java.util.Date utilDate = new java.util.Date();
-	java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-	DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
-	ScoreServiceJDBC scoreService = new ScoreServiceJDBC();
-	CommentServiceJDBC commentService = new CommentServiceJDBC();
-	RatingServiceJDBC ratingService = new RatingServiceJDBC();
-	
+	private DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
+	@Autowired
+	ScoreServiceJDBC scoreService;
+	@Autowired
+	CommentServiceJDBC commentService;
+	@Autowired
+	RatingServiceJDBC ratingService;
 
 	int moveCounter = 1;
 
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-	
-	public ConsoleUI(Field field){
+
+	public ConsoleUI(Field field) {
 		this.field = field;
 	}
 
@@ -89,7 +91,7 @@ public class ConsoleUI implements UserInterface {
 			System.out.println("Congratulations! You have won :)");
 			update();
 			Score score = new Score(System.getProperty("user.name"), "kamene",
-					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), sqlDate);
+					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
 			try {
 				scoreService.addScore(score);
 			} catch (ScoreException e) {
@@ -280,7 +282,7 @@ public class ConsoleUI implements UserInterface {
 		if (choice.toUpperCase().equals("Y")) {
 			System.out.println("Enter your comment:");
 			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), "kamene", userComment, sqlDate);
+			Comment cmt = new Comment(System.getProperty("user.name"), "kamene", userComment, getSQLCurrentDate());
 			try {
 				commentService.addComment(cmt);
 			} catch (CommentException e) {
@@ -306,7 +308,7 @@ public class ConsoleUI implements UserInterface {
 
 			if (matcher.matches()) {
 				Rating rt = new Rating(System.getProperty("user.name"), "kamene", Integer.parseInt(userRating),
-						sqlDate);
+						getSQLCurrentDate());
 				try {
 					ratingService.setRating(rt);
 				} catch (RatingException e) {
@@ -319,6 +321,10 @@ public class ConsoleUI implements UserInterface {
 		} else {
 			throw new WrongFormatException("Wrong Input!");
 		}
+	}
+
+	private java.sql.Date getSQLCurrentDate() {
+		return new java.sql.Date(new Date().getTime());
 	}
 
 }

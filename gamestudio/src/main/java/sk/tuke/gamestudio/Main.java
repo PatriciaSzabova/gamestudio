@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.kamene.core.Field;
+import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
+import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
+import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
 
 @Configuration
@@ -29,4 +32,19 @@ public class Main {
 
     @Bean
     public Field field() { return new Field(9, 9); }
+    
+    @Bean
+    public ScoreServiceJDBC scoreService(){
+    	return new ScoreServiceJDBC();
+    }
+    
+    @Bean
+    public CommentServiceJDBC commentService(){
+    	return new CommentServiceJDBC();
+    }
+    
+    @Bean
+    public RatingServiceJDBC ratingService(){
+    	return new RatingServiceJDBC();
+    }
 }

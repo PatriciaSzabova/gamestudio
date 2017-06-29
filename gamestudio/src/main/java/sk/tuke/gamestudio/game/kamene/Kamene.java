@@ -1,11 +1,10 @@
 package sk.tuke.gamestudio.game.kamene;
 
-
+import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUI;
 import sk.tuke.gamestudio.game.kamene.consoleui.WrongFormatException;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
-
 
 /**
  * Main application class
@@ -15,31 +14,27 @@ import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
  */
 public class Kamene {
 	/** User interface */
-	private UserInterface userInterface;
+	private GameUserInterface userInterface;
 
 	private static Kamene instance;
 
 	/** Starting time of the game */
 	private long startMillis;
 
-//	private BestTimes bestTimes;
-
 	/** settings */
 	private Settings settings;
-	
 
 	/**
 	 * Constructor
 	 */
 	public Kamene() {
 		instance = this;
-//		bestTimes = new BestTimes();
-//		userInterface = new ConsoleUI();
-//		try {
-//			userInterface.loadLastField();
-//		} catch (WrongFormatException e) {
-//			e.getMessage();
-//		}
+		// GameUserInterface = new ConsoleUI();
+		// try {
+		// userInterface.loadLastField();
+		// } catch (WrongFormatException e) {
+		// e.getMessage();
+		// }
 	}
 
 	/**
@@ -66,10 +61,6 @@ public class Kamene {
 
 	}
 
-//	public BestTimes getBestTimes() {
-//		return bestTimes;
-//	}
-
 	public int getPlayingSeconds() {
 		return (int) ((System.currentTimeMillis() - startMillis) / 1000);
 	}
@@ -92,10 +83,5 @@ public class Kamene {
 	 * @param args
 	 *            arguments
 	 */
-//	public static void main(String[] args) {
-//		getInstance();
-//		
-//
-//	}
 
 }
