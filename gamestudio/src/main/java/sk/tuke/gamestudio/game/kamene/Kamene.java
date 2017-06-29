@@ -34,12 +34,12 @@ public class Kamene {
 	public Kamene() {
 		instance = this;
 //		bestTimes = new BestTimes();
-		userInterface = new ConsoleUI();
-		try {
-			userInterface.loadLastField();
-		} catch (WrongFormatException e) {
-			e.getMessage();
-		}
+//		userInterface = new ConsoleUI();
+//		try {
+//			userInterface.loadLastField();
+//		} catch (WrongFormatException e) {
+//			e.getMessage();
+//		}
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class Kamene {
 		settings = this.getSettings();
 		Field field = new Field(settings.getRowCount(), settings.getColumnCount());
 		startMillis = System.currentTimeMillis();
-		userInterface.newGameStarted(field);
+		userInterface.newGameStarted();
 	}
 
 	public static Kamene getInstance() {

@@ -11,7 +11,7 @@ public interface UserInterface {
 	 * @param field
 	 *            field of mines and clues
 	 */
-	void newGameStarted(Field field);
+	void newGameStarted();
 
 	/**
 	 * Updates user interface - prints the field.

@@ -51,6 +51,10 @@ public class ConsoleUI implements UserInterface {
 
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+	
+	public ConsoleUI(Field field){
+		this.field = field;
+	}
 
 	/**
 	 * Reads line of text from the reader.
@@ -69,7 +73,7 @@ public class ConsoleUI implements UserInterface {
 	 * Creates a new playing field.
 	 */
 	@Override
-	public void newGameStarted(Field field) {
+	public void newGameStarted() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Let's play a game,").append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
@@ -261,7 +265,7 @@ public class ConsoleUI implements UserInterface {
 		String choice = readLine();
 		if (choice.toUpperCase().equals("Y")) {
 			field = field.load();
-			newGameStarted(field);
+			newGameStarted();
 		} else if (choice.toUpperCase().equals("N")) {
 			Kamene.getInstance().startNewGame();
 		} else {
