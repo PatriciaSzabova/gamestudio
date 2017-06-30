@@ -17,6 +17,7 @@ public class RatingServiceJDBC implements RatingService {
 	private static final String SELECT_EXISTS_RATING_QUERY = "SELECT player FROM rating WHERE player = ? AND game = ?";
 	private static final String SELECT_AVG_RATING_QUERY = "SELECT AVG(rating) FROM rating WHERE game = ?";
 	private static final String UPDATE_RATING = "UPDATE rating SET rating = ? WHERE player = ? AND game = ?";
+	
 
 	@Override
 	public void setRating(Rating rating) throws RatingException {

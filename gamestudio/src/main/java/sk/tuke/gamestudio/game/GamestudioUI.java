@@ -95,7 +95,7 @@ public class GamestudioUI {
 			e.printStackTrace();
 		}
 		currentGamePlayed = "";
-		processInput();
+		start();
 	}
 
 	private void processInput() {
