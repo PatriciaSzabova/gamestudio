@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
-import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
 import sk.tuke.gamestudio.server.entity.Comment;
 import sk.tuke.gamestudio.server.entity.Rating;
 import sk.tuke.gamestudio.server.entity.Score;
@@ -24,27 +23,20 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
 public class GamestudioUI {
 
-	private List<String> allGames;
+	@Autowired
+	private Map<Games, GameUserInterface> allGames;
 	@Autowired
 	private ScoreServiceJDBC scoreService;
 	@Autowired
 	private CommentServiceJDBC commentService;
 	@Autowired
 	private RatingServiceJDBC ratingService;
-	@Autowired
-	private ConsoleUIKamene consoleUIStones;
-	@Autowired
-	private ConsoleUIMinesweeper consoleUIMines;
 
 	private String currentGamePlayed;
 
 	private Score gameScore;
 
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-
-	public GamestudioUI() {
-		allGames = Arrays.stream(Games.values()).map(Games::name).collect(Collectors.toList());
-	}
 
 	private String readLine() {
 		try {
@@ -55,82 +47,83 @@ public class GamestudioUI {
 	}
 
 	public void start() {
-		System.out.println(allGames.toString());
-		processInput();
+		do {
+			processInput();
 
-		if (gameScore != null) {
-			System.out.println("Your score for this game is: " + gameScore);
+			if (gameScore != null) {
+				System.out.println("Your score for this game is: " + gameScore);
+				try {
+					scoreService.addScore(gameScore);
+				} catch (ScoreException e) {
+					e.getMessage();
+				}
+			}
+
 			try {
-				scoreService.addScore(gameScore);
+				System.out.println(scoreService.getBestScores(currentGamePlayed).toString());
 			} catch (ScoreException e) {
 				e.getMessage();
 			}
-		}
-
-		try {
-			System.out.println(scoreService.getBestScores(currentGamePlayed).toString());
-		} catch (ScoreException e) {
-			e.getMessage();
-		}
-		try {
-			commentOption();
-		} catch (WrongFormatException e) {
-			e.getMessage();
-		}
-		System.out.println("Other comments: ");
-		try {
-			System.out.println(commentService.getComments(currentGamePlayed).toString());
-		} catch (CommentException e1) {
-			e1.getMessage();
-		}
-		try {
-			ratingOption();
-		} catch (WrongFormatException e) {
-			e.getMessage();
-		}
-		System.out.println("Average rating:");
-		try {
-			System.out.println(ratingService.getAverageRating(currentGamePlayed));
-		} catch (RatingException e) {
-			e.printStackTrace();
-		}
-		currentGamePlayed = "";
-		start();
+			try {
+				commentOption();
+			} catch (WrongFormatException e) {
+				e.getMessage();
+			}
+			System.out.println("Other comments: ");
+			try {
+				System.out.println(commentService.getComments(currentGamePlayed).toString());
+			} catch (CommentException e1) {
+				e1.getMessage();
+			}
+			try {
+				ratingOption();
+			} catch (WrongFormatException e) {
+				e.getMessage();
+			}
+			System.out.println("Average rating:");
+			try {
+				System.out.println(ratingService.getAverageRating(currentGamePlayed));
+			} catch (RatingException e) {
+				e.printStackTrace();
+			}
+			currentGamePlayed = "";
+		} while (true);
 	}
 
 	private void processInput() {
+		int counter = 1;
 		StringBuilder sb = new StringBuilder();
 		sb.append("Pick your game:\n");
-		for (int i = 0; i < allGames.size(); i++) {
-			sb.append(i + 1).append(". ").append(allGames.get(i)).append("\n");
+		for (Games g : allGames.keySet()) {
+			sb.append(counter).append(". ").append(g).append("\n");
+			counter++;
 		}
 		sb.append("or press <X> to exit Gamestudio");
 		System.out.println(sb.toString());
 		String input = readLine();
-		handleInput(input);
+		handleInput(input.toUpperCase());
 	}
 
 	private void handleInput(String input) {
-		if (input.toUpperCase().equals("X")) {
-			System.out.println("You have exited Gamestudio");
-			System.exit(0);
-		} else if (Integer.parseInt(input) > allGames.size()) {
-			System.out.println("No such game exists");
+		Pattern pattern = Pattern.compile("(X)|([0-9]+)");
+		Matcher matcher = pattern.matcher(input);
+
+		if (matcher.matches()) {
+			if (input.equals("X")) {
+				System.out.println("You have exited Gamestudio");
+				System.exit(0);
+			} else if (Integer.parseInt(input) - 1 >= allGames.size() || Integer.parseInt(input) - 1 < 0) {
+				System.out.println("No such game exists :(");
+				processInput();
+			}
+			int index = Integer.parseInt(input) - 1;
+			Games g = Games.values()[index];
+			allGames.get(g).newGameStarted();
+		} else {
+			System.out.println("Wrong Input! Try again. ");
 			processInput();
 		}
-		String pickedGame = allGames.get(Integer.parseInt(input) - 1);
-		switch (pickedGame) {
-		case "MINESWEEPER":
-			currentGamePlayed = "mines";
-			gameScore = consoleUIMines.newGameStarted();
-			break;
-		case "KAMENE":
-			currentGamePlayed = "kamene";
-			gameScore = consoleUIStones.newGameStarted();
-			break;
-		default:
-			System.out.println("No such game exists");
-		}
+
 	}
 
 	private void commentOption() throws WrongFormatException {

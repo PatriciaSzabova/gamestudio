@@ -1,10 +1,16 @@
 package sk.tuke.gamestudio;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import sk.tuke.gamestudio.game.GameUserInterface;
+import sk.tuke.gamestudio.game.Games;
 import sk.tuke.gamestudio.game.GamestudioUI;
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
@@ -53,6 +59,14 @@ public class Main {
 	@Bean
 	public ConsoleUIMinesweeper consoleUIMines() {
 		return new ConsoleUIMinesweeper();
+	}
+
+	@Bean
+	public Map<Games, GameUserInterface> games() {
+		Map<Games, GameUserInterface> games = new HashMap<>();
+		games.put(Games.KAMENE, consoleUIKamene());
+		games.put(Games.MINESWEEPER, consoleUIMines());
+		return games;
 	}
 
 }

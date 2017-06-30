@@ -11,7 +11,7 @@ import sk.tuke.gamestudio.game.WrongFormatException;
  */
 public class Kamene {
 	/** User interface */
-	private GameUserInterface userInterface;
+//	private GameUserInterface userInterface;
 
 	private static Kamene instance;
 
@@ -39,16 +39,7 @@ public class Kamene {
 	 * Starts a new game.
 	 */
 	public void startNewGame() {
-		try {
-			userInterface.chooseFieldSize();
-		} catch (WrongFormatException e) {
-			e.getMessage();
-		}
-
 		settings = this.getSettings();
-		// Field field = new Field(settings.getRowCount(),
-		// settings.getColumnCount());
-		// userInterface.newGameStarted();
 	}
 
 	public static Kamene getInstance() {

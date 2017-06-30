@@ -2,14 +2,7 @@ package sk.tuke.gamestudio.game.minesweeper;
 
 import sk.tuke.gamestudio.game.GameUserInterface;
 
-/**
- * Main application class.
- */
-
 public class Minesweeper {
-	/** User interface. */
-	private GameUserInterface userInterface;
-
 	private long startMillis;
 
 	private static Minesweeper instance;
@@ -21,13 +14,8 @@ public class Minesweeper {
 	 */
 	private Minesweeper() {
 		instance = this;
-		// userInterface = new ConsoleUI(field);
-		// GameUserInterface.chooseDifficulty();
 		// settings = Settings.load();
-		// Field field = new
-		// Field(settings.getRowCount(),settings.getColumnCount(),settings.getMineCount());
 		startMillis = System.currentTimeMillis();
-		// GameUserInterface.newGameStarted();
 
 	}
 
