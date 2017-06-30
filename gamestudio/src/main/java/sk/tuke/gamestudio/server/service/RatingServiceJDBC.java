@@ -11,20 +11,22 @@ public class RatingServiceJDBC implements RatingService {
 
 	private Rating rating;
 	private int avgRating;
+	private int selectedRating;
 
 	private static final String INSERT_QUERY = "INSERT INTO rating (player, game, rating, ratedon) VALUES (?,?,?,?)";
-	private static final String SELECT_RATING_QUERY = "SELECT player, game, rating, ratedon FROM rating "
-			+ "WHERE player = ? AND game = ?";
+	private static final String SELECT_RATING_QUERY = "SELECT rating FROM rating WHERE player = ? AND game = ?";
+	private static final String SELECT_EXISTS_RATING_QUERY = "SELECT player FROM rating WHERE player = ? AND game = ?";
 	private static final String SELECT_AVG_RATING_QUERY = "SELECT AVG(rating) FROM rating WHERE game = ?";
 	private static final String UPDATE_RATING = "UPDATE rating SET rating = ? WHERE player = ? AND game = ?";
 
 	@Override
 	public void setRating(Rating rating) throws RatingException {
-		if (selectFromDB(rating.getGame(), rating.getPlayer())) {
-			updateRating(rating.getRating(), rating.getPlayer());
+		if (existsInDB(rating.getGame(), rating.getPlayer())) {
+			updateRating(rating.getRating(), rating.getPlayer(), rating.getGame());
 		} else {
 			insertToDb(rating);
 		}
+
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class RatingServiceJDBC implements RatingService {
 	@Override
 	public int getRating(String game, String player) throws RatingException {
 		selectFromDB(game, player);
-		return rating.getRating();
+		return selectedRating;
 	}
 
 	private void insertToDb(Rating rating) {
@@ -52,21 +54,35 @@ public class RatingServiceJDBC implements RatingService {
 		}
 	}
 
-	private boolean selectFromDB(String game, String player) {
+	private void selectFromDB(String game, String player) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
 				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(SELECT_RATING_QUERY)) {
 			pstm.setString(1, player);
 			pstm.setString(2, game);
 			ResultSet rs = pstm.executeQuery();
-			while (rs.next()) {
-				Rating rt = new Rating(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getDate(4));
-				rating = rt;
-				return true;
+			if (rs.next()) {
+				selectedRating = rs.getInt(1);
 			}
+			System.out.println(selectedRating);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return false;
+	}
+
+	private boolean existsInDB(String game, String player) {
+		boolean result = false;
+		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
+				DatabaseSettings.PASSWORD);
+				PreparedStatement pstm = connection.prepareStatement(SELECT_EXISTS_RATING_QUERY)) {
+			pstm.setString(1, player);
+			pstm.setString(2, game);
+			ResultSet rs = pstm.executeQuery();
+			result = rs.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println(result);
+		return result;
 	}
 
 	private void selectAvgRatingDB(String game) {
@@ -75,7 +91,7 @@ public class RatingServiceJDBC implements RatingService {
 				PreparedStatement pstm = connection.prepareStatement(SELECT_AVG_RATING_QUERY)) {
 			pstm.setString(1, game);
 			ResultSet rs = pstm.executeQuery();
-			while (rs.next()) {
+			if (rs.next()) {
 				avgRating = rs.getInt(1);
 			}
 		} catch (SQLException e) {
@@ -83,11 +99,13 @@ public class RatingServiceJDBC implements RatingService {
 		}
 	}
 
-	private void updateRating(int rating, String player) {
+	private void updateRating(int rating, String player, String game) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
 				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(UPDATE_RATING)) {
 			pstm.setInt(1, rating);
 			pstm.setString(2, player);
+			pstm.setString(3, game);
+			pstm.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
