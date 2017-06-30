@@ -9,7 +9,6 @@ import sk.tuke.gamestudio.server.entity.Rating;
 
 public class RatingServiceJDBC implements RatingService {
 
-	private Rating rating;
 	private int avgRating;
 	private int selectedRating;
 
@@ -26,7 +25,6 @@ public class RatingServiceJDBC implements RatingService {
 		} else {
 			insertToDb(rating);
 		}
-
 	}
 
 	@Override
