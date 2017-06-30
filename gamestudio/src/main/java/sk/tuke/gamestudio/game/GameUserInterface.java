@@ -1,6 +1,6 @@
 package sk.tuke.gamestudio.game;
 
-import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
+import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.server.entity.Score;
 
 public interface GameUserInterface {
@@ -23,8 +23,8 @@ public interface GameUserInterface {
 	 * 
 	 * @throws WrongFormatException
 	 */
-	void choseFieldSize() throws WrongFormatException;
+	void chooseFieldSize() throws WrongFormatException;
 	
-	void loadLastField() throws WrongFormatException;
+//	void loadLastField() throws WrongFormatException;
 
 }

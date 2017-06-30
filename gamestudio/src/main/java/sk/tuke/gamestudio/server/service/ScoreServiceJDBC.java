@@ -6,12 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import sk.tuke.gamestudio.server.entity.Score;
 
 public class ScoreServiceJDBC implements ScoreService {
@@ -24,7 +21,6 @@ public class ScoreServiceJDBC implements ScoreService {
 	@Override
 	public void addScore(Score score) throws ScoreException {
 		insertToDb(score);
-
 	}
 
 	@Override
@@ -43,25 +39,20 @@ public class ScoreServiceJDBC implements ScoreService {
 			pstm.setInt(3, score.getPoints());
 			pstm.setDate(4, score.getPlayedon());
 			pstm.execute();
-
-		}
-
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void selectFromDB(String game) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
 				DatabaseSettings.PASSWORD);
 				Statement stm = connection.createStatement();
-				ResultSet rs = stm.executeQuery(SELECT_QUERY + "'"+ game + "'")) {
+				ResultSet rs = stm.executeQuery(SELECT_QUERY + "'" + game + "'")) {
 			while (rs.next()) {
 				Score sc = new Score(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getDate(4));
 				scores.add(sc);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

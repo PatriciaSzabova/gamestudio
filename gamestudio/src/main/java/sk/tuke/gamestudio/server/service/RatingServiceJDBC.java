@@ -5,10 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import sk.tuke.gamestudio.server.entity.Rating;
-import sk.tuke.gamestudio.server.entity.Score;
 
 public class RatingServiceJDBC implements RatingService {
 
@@ -28,7 +25,6 @@ public class RatingServiceJDBC implements RatingService {
 		} else {
 			insertToDb(rating);
 		}
-
 	}
 
 	@Override
@@ -51,16 +47,12 @@ public class RatingServiceJDBC implements RatingService {
 			pstm.setInt(3, rating.getRating());
 			pstm.setDate(4, rating.getRatedon());
 			pstm.execute();
-
-		}
-
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	private boolean selectFromDB(String game, String player){
+	private boolean selectFromDB(String game, String player) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
 				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(SELECT_RATING_QUERY)) {
 			pstm.setString(1, player);
@@ -71,7 +63,6 @@ public class RatingServiceJDBC implements RatingService {
 				rating = rt;
 				return true;
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +78,6 @@ public class RatingServiceJDBC implements RatingService {
 			while (rs.next()) {
 				avgRating = rs.getInt(1);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

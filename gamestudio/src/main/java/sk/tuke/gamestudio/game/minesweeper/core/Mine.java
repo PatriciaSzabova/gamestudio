@@ -1,7 +1,5 @@
 package sk.tuke.gamestudio.game.minesweeper.core;
 
-import sk.tuke.gamestudio.game.minesweeper.core.Tile.State;
-
 /**
  * Mine tile.
  */

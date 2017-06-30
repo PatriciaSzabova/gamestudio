@@ -1,6 +1,5 @@
 package sk.tuke.gamestudio.game.minesweeper.core;
 
-import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Random;
 
@@ -9,7 +8,7 @@ import sk.tuke.gamestudio.game.GameState;
 /**
  * Field represents playing field and game logic.
  */
-public class FieldMines {
+public class Field {
 	/**
 	 * Playing field tiles.
 	 */
@@ -45,13 +44,12 @@ public class FieldMines {
 	 * @param mineCount
 	 *            mine count
 	 */
-	public FieldMines(int rowCount, int columnCount, int mineCount) {
+	public Field(int rowCount, int columnCount, int mineCount) {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		this.mineCount = mineCount;
 		tiles = new Tile[rowCount][columnCount];
 
-		// generate the field content
 		generate();
 	}
 
@@ -74,7 +72,7 @@ public class FieldMines {
 	public Tile getTile(int row, int column) {
 		return tiles[row][column];
 	}
-	
+
 	public void setState(GameState state) {
 		this.state = state;
 	}
@@ -88,7 +86,7 @@ public class FieldMines {
 	 *            column number
 	 */
 	public void openTile(int row, int column) {
-		if(state.equals(GameState.FAILED)){
+		if (state.equals(GameState.FAILED)) {
 			return;
 		}
 		Tile tile = tiles[row][column];

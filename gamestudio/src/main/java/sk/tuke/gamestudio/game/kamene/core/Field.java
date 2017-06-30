@@ -9,19 +9,16 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
-
 import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.kamene.Settings;
 
 /**
  * Field represents playing field and game logic.
  */
-public class FieldKamene implements Serializable {
+public class Field implements Serializable {
 
 	/**
 	 * Playing field tiles.
@@ -67,13 +64,13 @@ public class FieldKamene implements Serializable {
 	 * @param columnCount
 	 *            column count
 	 */
-	public FieldKamene(int rowCount, int columnCount) {
+	public Field(int rowCount, int columnCount) {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		tiles = new Tile[rowCount][columnCount];
 
-		generate(); // generates the field content
-		getDefaultTilePosition(); // tracks the position of the default tile
+		generate();
+		getDefaultTilePosition();
 	}
 
 	/**
@@ -82,7 +79,7 @@ public class FieldKamene implements Serializable {
 	 * @param settings
 	 *            field settings
 	 */
-	public FieldKamene(Settings settings) {
+	public Field(Settings settings) {
 		this.rowCount = settings.getRowCount();
 		this.columnCount = settings.getColumnCount();
 		tiles = new Tile[rowCount][columnCount];
@@ -152,11 +149,9 @@ public class FieldKamene implements Serializable {
 					rowOfLast = row;
 					colOfLast = col;
 				}
-
 			}
 		}
 		tiles[rowOfLast][colOfLast].setNumber(-1);
-
 	}
 
 	/**
@@ -197,7 +192,6 @@ public class FieldKamene implements Serializable {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -240,10 +234,10 @@ public class FieldKamene implements Serializable {
 	 * 
 	 * @return field
 	 */
-	public static FieldKamene load() {
-		FieldKamene field = null;
+	public static Field load() {
+		Field field = null;
 		try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(LAST_GAME_STATUS_FILE))) {
-			field = (FieldKamene) input.readObject();
+			field = (Field) input.readObject();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

@@ -8,7 +8,6 @@ import java.io.Serializable;
 public enum GameState implements Serializable {
 	/** Playing game. */
 	PLAYING,
-
 	/** Game solved. */
 	SOLVED,
 	

@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import sk.tuke.gamestudio.server.entity.Comment;
-import sk.tuke.gamestudio.server.entity.Score;
 
 public class CommentServiceJDBC implements CommentService {
 
@@ -22,7 +20,6 @@ public class CommentServiceJDBC implements CommentService {
 	@Override
 	public void addComment(Comment comment) throws CommentException {
 		insertToDb(comment);
-
 	}
 
 	@Override
@@ -39,29 +36,23 @@ public class CommentServiceJDBC implements CommentService {
 			pstm.setString(3, comment.getComment());
 			pstm.setDate(4, comment.getCommentedon());
 			pstm.execute();
-
-		}
-
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void selectFromDB(String game) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
-				DatabaseSettings.PASSWORD); Statement stm = connection.createStatement();
-				ResultSet rs = stm.executeQuery(SELECT_QUERY + "'"+ game + "'")){
-				
+				DatabaseSettings.PASSWORD);
+				Statement stm = connection.createStatement();
+				ResultSet rs = stm.executeQuery(SELECT_QUERY + "'" + game + "'")) {
+
 			while (rs.next()) {
 				Comment cmt = new Comment(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4));
 				comments.add(cmt);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

@@ -1,14 +1,5 @@
 package sk.tuke.gamestudio.game.minesweeper;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Settings implements Serializable {
@@ -21,8 +12,9 @@ public class Settings implements Serializable {
 	public static final Settings INTERMEDIATE = new Settings(16, 16, 40);
 	public static final Settings EXPERT = new Settings(16, 30, 99);
 
-	private static final String SETTING_FILE = System.getProperty("user.home") + System.getProperty("file.separator")
-			+ "minesweeper.settings";
+	// private static final String SETTING_FILE =
+	// System.getProperty("user.home") + System.getProperty("file.separator")
+	// + "minesweeper.settings";
 
 	public Settings(int rowCount, int columnCount, int mineCount) {
 		this.rowCount = rowCount;
@@ -42,34 +34,35 @@ public class Settings implements Serializable {
 		return mineCount;
 	}
 
-	public void save() {
-		try (FileOutputStream out = new FileOutputStream(SETTING_FILE);
-				ObjectOutputStream s = new ObjectOutputStream(out)) {
-			s.writeObject(this);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	// public void save() {
+	// try (FileOutputStream out = new FileOutputStream(SETTING_FILE);
+	// ObjectOutputStream s = new ObjectOutputStream(out)) {
+	// s.writeObject(this);
+	// } catch (FileNotFoundException e) {
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
-	public static Settings load() {
-		Settings settings = null;
-		try 
-			(ObjectInputStream input = new ObjectInputStream(new FileInputStream(SETTING_FILE)))
-			{settings = (Settings) input.readObject();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		if (settings == null){
-			return BEGINNER;
-		}
-
-		return settings;
-
-	}
+	// public static Settings load() {
+	// Settings settings = null;
+	// try
+	// (ObjectInputStream input = new ObjectInputStream(new
+	// FileInputStream(SETTING_FILE)))
+	// {settings = (Settings) input.readObject();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// } catch (ClassNotFoundException e) {
+	// e.printStackTrace();
+	// }
+	// if (settings == null){
+	// return BEGINNER;
+	// }
+	//
+	// return settings;
+	//
+	// }
 
 	@Override
 	public int hashCode() {

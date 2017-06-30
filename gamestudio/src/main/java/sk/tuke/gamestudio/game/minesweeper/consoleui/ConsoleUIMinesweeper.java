@@ -10,37 +10,24 @@ import java.util.Formatter;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import sk.tuke.gamestudio.game.minesweeper.Minesweeper;
 import sk.tuke.gamestudio.game.minesweeper.Settings;
 import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.WrongFormatException;
-import sk.tuke.gamestudio.game.minesweeper.core.FieldMines;
+import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
-import sk.tuke.gamestudio.server.entity.Comment;
-import sk.tuke.gamestudio.server.entity.Rating;
 import sk.tuke.gamestudio.server.entity.Score;
-import sk.tuke.gamestudio.server.service.CommentException;
-import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
-import sk.tuke.gamestudio.server.service.RatingException;
-import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
-import sk.tuke.gamestudio.server.service.ScoreException;
-import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
 /**
  * Console user interface.
  */
 public class ConsoleUIMinesweeper implements GameUserInterface {
 	/** Playing field. */
-	private FieldMines field;
-
-	// Date date = new Date();
-	// DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-
+	private Field field;
 	private DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+	private Settings settings;
+	private Score score;
 
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -49,10 +36,6 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 	private int randomCol;
 
 	private RandomOpenThread thread = new RandomOpenThread();
-
-	public ConsoleUIMinesweeper(FieldMines field) {
-		this.field = field;
-	}
 
 	/**
 	 * Reads line of text from the reader.
@@ -79,6 +62,13 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		sb.append(df.format(getSQLCurrentDate())).append("\n\n").append("Let's play a game,")
 				.append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
+		try {
+			chooseFieldSize();
+		} catch (WrongFormatException e) {
+			e.printStackTrace();
+		}
+		settings = Minesweeper.getInstance().getSettings();
+		Field field = new Field(settings.getRowCount(), settings.getColumnCount(), settings.getMineCount());
 		synchronized (this) {
 			thread.start();
 		}
@@ -93,9 +83,8 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		if (field.getState() == GameState.SOLVED) {
 			System.out.println("Congratulations! You have WON! :D ");
 			update();
-			Score score = new Score(System.getProperty("user.name"), "mines",
+			score = new Score(System.getProperty("user.name"), "mines",
 					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
-			return score;
 
 		} else if (field.getState() == GameState.FAILED) {
 			System.out.println("You have FAILED! :(");
@@ -103,7 +92,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		} else if (field.getState() == GameState.EXIT) {
 			System.out.println("You have exited the game");
 		}
-		return null;
+		return score;
 
 	}
 
@@ -165,10 +154,13 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 	}
 
 	@Override
-	public void choseFieldSize() throws WrongFormatException {
+	public void chooseFieldSize() throws WrongFormatException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Chose your game difficulty: \n").append("1. BEGINNER \n").append("2. INTERMEDIATE \n")
-				.append("3. EXPERT \n").append("4. CUSTOM \n").append("5. LOAD LAST PLAYED SETTNG");
+				.append("3. EXPERT \n").append("4. CUSTOM \n");// .append("5.
+																// LOAD LAST
+																// PLAYED
+																// SETTNG");
 		System.out.println(sb.toString());
 		String choice = readLine();
 		int selectionNumber = Integer.parseInt(choice);
@@ -194,13 +186,13 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 			int mineCount = Integer.parseInt(mineNumber);
 			Minesweeper.getInstance().setSettings(new Settings(rowCount, columnCount, mineCount));
 			break;
-		case 5:
-			try {
-				loadLastField();
-			} catch (WrongFormatException e) {
-				e.printStackTrace();
-			}
-			break;
+		// case 5:
+		// try {
+		// loadLastField();
+		// } catch (WrongFormatException e) {
+		// e.printStackTrace();
+		// }
+		// break;
 		default:
 			System.out.println("Wrong input");
 			break;
@@ -208,7 +200,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 
 	}
 
-	private void openRandomTile(FieldMines field) {
+	private void openRandomTile(Field field) {
 		boolean isValid = false;
 		randomRow = 0;
 		randomCol = 0;
@@ -224,11 +216,11 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		} while (isValid = false);
 	}
 
-	@Override
-	public void loadLastField() throws WrongFormatException {
-		Minesweeper.getInstance().setSettings(Settings.load());
-
-	}
+	// @Override
+	// public void loadLastField() throws WrongFormatException {
+	// Minesweeper.getInstance().setSettings(Settings.load());
+	//
+	// }
 
 	private java.sql.Date getSQLCurrentDate() {
 		return new java.sql.Date(new Date().getTime());

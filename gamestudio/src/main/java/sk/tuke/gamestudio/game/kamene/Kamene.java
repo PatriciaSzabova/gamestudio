@@ -2,9 +2,6 @@ package sk.tuke.gamestudio.game.kamene;
 
 import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.WrongFormatException;
-import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
-import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
-import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
 
 /**
  * Main application class
@@ -43,14 +40,15 @@ public class Kamene {
 	 */
 	public void startNewGame() {
 		try {
-			userInterface.choseFieldSize();
+			userInterface.chooseFieldSize();
 		} catch (WrongFormatException e) {
 			e.getMessage();
 		}
 
 		settings = this.getSettings();
-		FieldKamene field = new FieldKamene(settings.getRowCount(), settings.getColumnCount());		
-		userInterface.newGameStarted();
+		// Field field = new Field(settings.getRowCount(),
+		// settings.getColumnCount());
+		// userInterface.newGameStarted();
 	}
 
 	public static Kamene getInstance() {
@@ -76,12 +74,5 @@ public class Kamene {
 	public void setSettings(Settings settings) {
 		this.settings = settings;
 	}
-
-	/**
-	 * Main method.
-	 * 
-	 * @param args
-	 *            arguments
-	 */
 
 }

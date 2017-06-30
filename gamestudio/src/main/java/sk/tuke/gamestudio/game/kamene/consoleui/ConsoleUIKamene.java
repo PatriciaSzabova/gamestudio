@@ -5,30 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.WrongFormatException;
 import sk.tuke.gamestudio.game.kamene.Kamene;
 import sk.tuke.gamestudio.game.kamene.Settings;
-import sk.tuke.gamestudio.game.kamene.core.FieldKamene;
+import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
-import sk.tuke.gamestudio.server.entity.Comment;
-import sk.tuke.gamestudio.server.entity.Rating;
 import sk.tuke.gamestudio.server.entity.Score;
-import sk.tuke.gamestudio.server.service.CommentException;
-import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
-import sk.tuke.gamestudio.server.service.RatingException;
-import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
-import sk.tuke.gamestudio.server.service.ScoreException;
-import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 
 /**
  * Console user interface.
@@ -36,7 +22,9 @@ import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
 public class ConsoleUIKamene implements GameUserInterface {
 
 	/** Playing field. */
-	private FieldKamene field;
+	private Field field;
+	private Settings settings;
+	private Score score;
 
 	/** Current date */
 
@@ -46,10 +34,6 @@ public class ConsoleUIKamene implements GameUserInterface {
 
 	/** Input reader. */
 	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-
-	public ConsoleUIKamene(FieldKamene field) {
-		this.field = field;
-	}
 
 	/**
 	 * Reads line of text from the reader.
@@ -72,6 +56,9 @@ public class ConsoleUIKamene implements GameUserInterface {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Let's play a game,").append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
+		chooseFieldSize();
+		settings = Kamene.getInstance().getSettings();
+		Field field = new Field(settings.getRowCount(), settings.getColumnCount());
 
 		this.field = field;
 
@@ -84,13 +71,12 @@ public class ConsoleUIKamene implements GameUserInterface {
 			System.out.println("Congratulations! You have won :)");
 			update();
 
-			Score score = new Score(System.getProperty("user.name"), "kamene",
+			score = new Score(System.getProperty("user.name"), "kamene",
 					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
-			return score;
 		} else if (field.getGameState() == GameState.EXIT) {
 			System.out.println("You have exited the game");
 		}
-		return null;
+		return score;
 
 	}
 
@@ -179,7 +165,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 	 * Allows player to chose the playing field size. Default or custom.
 	 */
 	@Override
-	public void choseFieldSize() {
+	public void chooseFieldSize() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Choose your Field:\n").append("1. DEFAULT\n").append("2. CUSTOM");
 		System.out.println(sb.toString());
@@ -213,20 +199,20 @@ public class ConsoleUIKamene implements GameUserInterface {
 		}
 	}
 
-	@Override
-	public void loadLastField() throws WrongFormatException {
-		System.out.println("Do you wish to continue previous game? Y/N");
-		String choice = readLine();
-		if (choice.toUpperCase().equals("Y")) {
-			field = field.load();
-			newGameStarted();
-		} else if (choice.toUpperCase().equals("N")) {
-			Kamene.getInstance().startNewGame();
-		} else {
-			throw new WrongFormatException("Wrong Input!");
-		}
-	}
-
+	// @Override
+	// public void loadLastField() throws WrongFormatException {
+	// System.out.println("Do you wish to continue previous game? Y/N");
+	// String choice = readLine();
+	// if (choice.toUpperCase().equals("Y")) {
+	// field = field.load();
+	// newGameStarted();
+	// } else if (choice.toUpperCase().equals("N")) {
+	// Kamene.getInstance().startNewGame();
+	// } else {
+	// throw new WrongFormatException("Wrong Input!");
+	// }
+	// }
+	//
 	private java.sql.Date getSQLCurrentDate() {
 		return new java.sql.Date(new Date().getTime());
 	}

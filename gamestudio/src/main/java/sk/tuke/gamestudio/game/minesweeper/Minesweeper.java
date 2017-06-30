@@ -1,13 +1,6 @@
 package sk.tuke.gamestudio.game.minesweeper;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 import sk.tuke.gamestudio.game.GameUserInterface;
-import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
-import sk.tuke.gamestudio.game.minesweeper.core.FieldMines;
-import sk.tuke.gamestudio.game.minesweeper.core.Mine;
 
 /**
  * Main application class.
@@ -28,7 +21,6 @@ public class Minesweeper {
 	 */
 	private Minesweeper() {
 		instance = this;
-		// Field field = new Field(9,9,10);
 		// userInterface = new ConsoleUI(field);
 		// GameUserInterface.chooseDifficulty();
 		// settings = Settings.load();
@@ -54,8 +46,12 @@ public class Minesweeper {
 		return settings;
 	}
 
+	// public void setSettings(Settings settings) {
+	// settings.save();
+	// }
+
 	public void setSettings(Settings settings) {
-		settings.save();
+		this.settings = settings;
 	}
 
 	/**

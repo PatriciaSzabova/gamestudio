@@ -9,16 +9,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.SpringApplication;
-
-import sk.tuke.gamestudio.Main;
-import sk.tuke.gamestudio.game.kamene.Kamene;
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
 import sk.tuke.gamestudio.server.entity.Comment;
@@ -64,8 +55,9 @@ public class GamestudioUI {
 	}
 
 	public void start() {
+		System.out.println(allGames.toString());
 		processInput();
-		
+
 		if (gameScore != null) {
 			System.out.println("Your score for this game is: " + gameScore);
 			try {
@@ -103,11 +95,10 @@ public class GamestudioUI {
 			e.printStackTrace();
 		}
 		currentGamePlayed = "";
-		System.exit(0);
-
+		processInput();
 	}
 
-	private void processInput(){
+	private void processInput() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Pick your game:\n");
 		for (int i = 0; i < allGames.size(); i++) {
@@ -115,20 +106,19 @@ public class GamestudioUI {
 		}
 		sb.append("or press <X> to exit Gamestudio");
 		System.out.println(sb.toString());
-		String input = readLine();		
-		handleInput(input);	
+		String input = readLine();
+		handleInput(input);
 	}
 
-	private void handleInput(String input) {		
-		
+	private void handleInput(String input) {
 		if (input.toUpperCase().equals("X")) {
 			System.out.println("You have exited Gamestudio");
 			System.exit(0);
-		}else if(Integer.parseInt(input) > allGames.size()-1){
+		} else if (Integer.parseInt(input) > allGames.size()) {
 			System.out.println("No such game exists");
 			processInput();
 		}
-		String pickedGame = allGames.get(Integer.parseInt(input)-1);
+		String pickedGame = allGames.get(Integer.parseInt(input) - 1);
 		switch (pickedGame) {
 		case "MINESWEEPER":
 			currentGamePlayed = "mines";
@@ -139,9 +129,8 @@ public class GamestudioUI {
 			gameScore = consoleUIStones.newGameStarted();
 			break;
 		default:
-			System.out.println("No such game exists");		
+			System.out.println("No such game exists");
 		}
-		
 	}
 
 	private void commentOption() throws WrongFormatException {
