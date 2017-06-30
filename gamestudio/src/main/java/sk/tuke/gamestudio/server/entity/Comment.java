@@ -7,6 +7,8 @@ import sk.tuke.gamestudio.server.service.annotation.*;
 @Table(name = "comment", createDrop = false)
 public class Comment {
 	
+	@Column(name = "id", primaryKey = true)
+	private int id;
 	@Column(name = "player")
 	private String player;
 	@Column(name = "game")

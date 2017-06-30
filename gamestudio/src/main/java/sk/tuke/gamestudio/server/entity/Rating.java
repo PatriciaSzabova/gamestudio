@@ -7,7 +7,9 @@ import sk.tuke.gamestudio.server.service.annotation.Table;
 
 @Table(name = "rating", createDrop = false)
 public class Rating {
-
+	
+	@Column(name = "id", primaryKey = true)
+	private int id;
 	@Column(name = "player")
 	private String player;
 	@Column(name = "game")

@@ -8,6 +8,8 @@ import sk.tuke.gamestudio.server.service.annotation.Table;
 @Table(name = "score", createDrop = false)
 public class Score {
 	
+	@Column(name = "id", primaryKey = true)
+	private int id;
 	@Column(name = "player")
 	private String player;
 	@Column(name = "game")
