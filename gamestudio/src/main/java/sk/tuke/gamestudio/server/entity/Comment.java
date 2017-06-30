@@ -2,11 +2,18 @@ package sk.tuke.gamestudio.server.entity;
 
 import java.sql.Date;
 
+import sk.tuke.gamestudio.server.service.annotation.*;
+
+@Table(name = "comment", createDrop = false)
 public class Comment {
 	
+	@Column(name = "player")
 	private String player;
+	@Column(name = "game")
 	private String game;
+	@Column(name = "comment")
 	private String comment;
+	@Column(name = "commentedon")
 	private Date commentedon;
 
 	public Comment(String player, String game, String comment, Date commentedon) {

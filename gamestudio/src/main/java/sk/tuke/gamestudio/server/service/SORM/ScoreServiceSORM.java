@@ -1,8 +1,10 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.SORM;
 
 import java.util.List;
 
 import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.ScoreException;
+import sk.tuke.gamestudio.server.service.ScoreService;
 
 public class ScoreServiceSORM implements ScoreService {
 

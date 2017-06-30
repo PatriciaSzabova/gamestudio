@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import sk.tuke.gamestudio.server.entity.Rating;
+import sk.tuke.gamestudio.server.service.DatabaseSettings;
+import sk.tuke.gamestudio.server.service.RatingException;
+import sk.tuke.gamestudio.server.service.RatingService;
 
 public class RatingServiceJDBC implements RatingService {
 

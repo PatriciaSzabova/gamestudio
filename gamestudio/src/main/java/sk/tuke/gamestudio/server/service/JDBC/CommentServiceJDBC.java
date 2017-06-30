@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,6 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import sk.tuke.gamestudio.server.entity.Comment;
+import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
+import sk.tuke.gamestudio.server.service.DatabaseSettings;
 
 public class CommentServiceJDBC implements CommentService {
 

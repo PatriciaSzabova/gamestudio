@@ -1,10 +1,12 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.SORM;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import sk.tuke.gamestudio.server.entity.Comment;
+import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
 
 public class CommentServiceSORM implements CommentService {
 
@@ -18,12 +20,6 @@ public class CommentServiceSORM implements CommentService {
 	public List<Comment> getComments(String game) throws CommentException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public String getInsertString(Class<?> clazz) {
-		return String.format("INSERT INTO %s (%s) VALUES (%s)", clazz.getSimpleName(),
-				Arrays.stream(clazz.getDeclaredFields()).map(f -> f.getName()).collect(Collectors.joining(", ")),
-				Arrays.stream(clazz.getDeclaredFields()).map(f -> "?").collect(Collectors.joining(", ")));
 	}
 
 }

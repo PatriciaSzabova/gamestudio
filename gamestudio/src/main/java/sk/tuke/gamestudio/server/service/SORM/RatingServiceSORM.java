@@ -1,6 +1,8 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.SORM;
 
 import sk.tuke.gamestudio.server.entity.Rating;
+import sk.tuke.gamestudio.server.service.RatingException;
+import sk.tuke.gamestudio.server.service.RatingService;
 
 public class RatingServiceSORM implements RatingService {
 

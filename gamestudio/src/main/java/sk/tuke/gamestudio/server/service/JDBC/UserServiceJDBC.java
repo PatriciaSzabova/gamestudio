@@ -1,6 +1,8 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.JDBC;
 
 import sk.tuke.gamestudio.server.entity.User;
+import sk.tuke.gamestudio.server.service.UserException;
+import sk.tuke.gamestudio.server.service.UserService;
 
 public class UserServiceJDBC implements UserService {
 

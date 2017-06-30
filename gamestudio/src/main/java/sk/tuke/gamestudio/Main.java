@@ -14,9 +14,9 @@ import sk.tuke.gamestudio.game.Games;
 import sk.tuke.gamestudio.game.GamestudioUI;
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
-import sk.tuke.gamestudio.server.service.CommentServiceJDBC;
-import sk.tuke.gamestudio.server.service.RatingServiceJDBC;
-import sk.tuke.gamestudio.server.service.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
+import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
+import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
 
 @Configuration
 @SpringBootApplication

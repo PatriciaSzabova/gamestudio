@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.service;
+package sk.tuke.gamestudio.server.service.JDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.DatabaseSettings;
+import sk.tuke.gamestudio.server.service.ScoreException;
+import sk.tuke.gamestudio.server.service.ScoreService;
 
 public class ScoreServiceJDBC implements ScoreService {
 
