@@ -1,7 +1,5 @@
 package sk.tuke.gamestudio.server.service.SORM;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,7 +7,6 @@ import java.util.stream.Collectors;
 import sk.tuke.gamestudio.server.entity.Comment;
 import sk.tuke.gamestudio.server.service.CommentException;
 import sk.tuke.gamestudio.server.service.CommentService;
-import sk.tuke.gamestudio.server.service.DatabaseSettings;
 
 public class CommentServiceSORM implements CommentService {
 

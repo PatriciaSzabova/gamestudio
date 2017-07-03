@@ -2,25 +2,32 @@ package sk.tuke.gamestudio.server.entity;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import sk.tuke.gamestudio.server.service.annotation.Column;
 import sk.tuke.gamestudio.server.service.annotation.Table;
 
-@Table(name = "rating", createDrop = false)
+@Entity
+// @Table(name = "rating", createDrop = false)
 public class Rating {
 
-	@Column(name = "id", primaryKey = true)
+	@Id
+	@GeneratedValue
+	// @Column(name = "id", primaryKey = true)
 	private int id;
-	@Column(name = "player")
+	//@Column(name = "player")
 	private String player;
-	@Column(name = "game")
+	//@Column(name = "game")
 	private String game;
-	@Column(name = "rating")
+	//@Column(name = "rating")
 	private int rating;
-	@Column(name = "ratedon")
+	//@Column(name = "ratedon")
 	private Date ratedon;
-	
-	public Rating(){
-		
+
+	public Rating() {
+
 	}
 
 	public Rating(String player, String game, int rating, Date ratedon) {

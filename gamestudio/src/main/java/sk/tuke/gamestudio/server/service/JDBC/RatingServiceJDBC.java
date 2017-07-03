@@ -32,7 +32,7 @@ public class RatingServiceJDBC implements RatingService {
 	}
 
 	@Override
-	public int getAverageRating(String game) throws RatingException {
+	public double getAverageRating(String game) throws RatingException {
 		selectAvgRatingDB(game);
 		return avgRating;
 	}

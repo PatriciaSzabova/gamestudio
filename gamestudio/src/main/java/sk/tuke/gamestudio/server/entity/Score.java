@@ -2,21 +2,28 @@ package sk.tuke.gamestudio.server.entity;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import sk.tuke.gamestudio.server.service.annotation.Column;
 import sk.tuke.gamestudio.server.service.annotation.Table;
 
-@Table(name = "score", createDrop = false)
+@Entity
+//@Table(name = "score", createDrop = false)
 public class Score {
 
-	@Column(name = "id", primaryKey = true)
+	@Id
+	@GeneratedValue
+	//@Column(name = "id", primaryKey = true)
 	private int id;
-	@Column(name = "player")
+	//@Column(name = "player")
 	private String player;
-	@Column(name = "game")
+	//@Column(name = "game")
 	private String game;
-	@Column(name = "points")
+	//@Column(name = "points")
 	private int points;
-	@Column(name = "playedon")
+	//@Column(name = "playedon")
 	private Date playedon;
 	
 	public Score(){

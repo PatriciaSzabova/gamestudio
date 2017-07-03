@@ -20,6 +20,9 @@ import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
 import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
 import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
 import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
@@ -34,12 +37,18 @@ public class GamestudioUI {
 	// private CommentServiceJDBC commentService;
 	// @Autowired
 	// private RatingServiceJDBC ratingService;
+	// @Autowired
+	// private ScoreServiceSORM scoreService;
+	// @Autowired
+	// private CommentServiceSORM commentService;
+	// @Autowired
+	// private RatingServiceSORM ratingService;
 	@Autowired
-	private ScoreServiceSORM scoreService;
+	private ScoreServiceJPA scoreService;
 	@Autowired
-	private CommentServiceSORM commentService;
+	private RatingServiceJPA ratingService;
 	@Autowired
-	private RatingServiceSORM ratingService;
+	private CommentServiceJPA commentService;
 
 	private String currentGamePlayed;
 
@@ -95,6 +104,12 @@ public class GamestudioUI {
 			} catch (RatingException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Your Rating:");
+			try {
+				System.out.println(ratingService.getRating(currentGamePlayed, System.getProperty("user.name")));
+			} catch (RatingException e) {
+				e.printStackTrace();
+			}
 			currentGamePlayed = "";
 		} while (true);
 	}
@@ -103,7 +118,7 @@ public class GamestudioUI {
 		int counter = 1;
 		StringBuilder sb = new StringBuilder();
 		sb.append("Pick your game:\n");
-		for (Games g : allGames.keySet()) {
+		for (Games g : Games.values()) {
 			sb.append(counter).append(". ").append(g).append("\n");
 			counter++;
 		}
@@ -142,7 +157,8 @@ public class GamestudioUI {
 		if (choice.toUpperCase().equals("Y")) {
 			System.out.println("Enter your comment:");
 			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), currentGamePlayed, userComment, getSQLCurrentDate());
+			Comment cmt = new Comment(System.getProperty("user.name"), currentGamePlayed, userComment,
+					getSQLCurrentDate());
 			try {
 				commentService.addComment(cmt);
 			} catch (CommentException e) {

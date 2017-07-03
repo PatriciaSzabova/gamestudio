@@ -17,6 +17,9 @@ import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
 import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
 import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
 import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
 import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
@@ -39,20 +42,20 @@ public class Main {
 		return new GamestudioUI();
 	}
 
-	@Bean
-	public ScoreServiceJDBC scoreService() {
-		return new ScoreServiceJDBC();
-	}
-
-	@Bean
-	public CommentServiceJDBC commentService() {
-		return new CommentServiceJDBC();
-	}
-
-	@Bean
-	public RatingServiceJDBC ratingService() {
-		return new RatingServiceJDBC();
-	}
+//	@Bean
+//	public ScoreServiceJDBC scoreService() {
+//		return new ScoreServiceJDBC();
+//	}
+//
+//	@Bean
+//	public CommentServiceJDBC commentService() {
+//		return new CommentServiceJDBC();
+//	}
+//
+//	@Bean
+//	public RatingServiceJDBC ratingService() {
+//		return new RatingServiceJDBC();
+//	}
 
 	@Bean
 	public ConsoleUIKamene consoleUIKamene() {
@@ -72,19 +75,31 @@ public class Main {
 		return games;
 	}
 	
-	@Bean
-	public CommentServiceSORM commentServiceSORM(){
-		return new CommentServiceSORM();
-	}
-	
-	@Bean
-	public RatingServiceSORM ratingServiceSORM(){
-		return new RatingServiceSORM();
-	}
-	
-	@Bean
-	public ScoreServiceSORM scoreServiceSORM(){
-		return new ScoreServiceSORM();
-	}
+//	@Bean
+//	public CommentServiceSORM commentServiceSORM(){
+//		return new CommentServiceSORM();
+//	}
+//	
+//	@Bean
+//	public RatingServiceSORM ratingServiceSORM(){
+//		return new RatingServiceSORM();
+//	}
+//	
+//	@Bean
+//	public ScoreServiceSORM scoreServiceSORM(){
+//		return new ScoreServiceSORM();
+//	}
 
+	@Bean
+	public ScoreServiceJPA scoreServiceJPA(){
+		return new ScoreServiceJPA();
+	}
+	@Bean 
+	public RatingServiceJPA ratingServiceJPA(){
+		return new RatingServiceJPA();
+	}
+	@Bean
+	public CommentServiceJPA commentServiceJPA(){
+		return new CommentServiceJPA();
+	}
 }

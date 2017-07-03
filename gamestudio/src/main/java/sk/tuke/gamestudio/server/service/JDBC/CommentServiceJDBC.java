@@ -16,7 +16,7 @@ import sk.tuke.gamestudio.server.service.DatabaseSettings;
 public class CommentServiceJDBC implements CommentService {
 
 	private static final String INSERT_QUERY = "INSERT INTO comment (player, game, comment, commentedon) VALUES (?,?,?,?)";
-	private static final String SELECT_QUERY = "SELECT * FROM comment WHERE game = ";
+	private static final String SELECT_QUERY = "SELECT player, game, comment, commentedon FROM comment WHERE game = ";
 
 	List<Comment> comments = new ArrayList<>();
 
