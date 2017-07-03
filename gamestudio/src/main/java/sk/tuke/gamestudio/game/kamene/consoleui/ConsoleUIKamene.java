@@ -71,7 +71,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 			System.out.println("Congratulations! You have won :)");
 			update();
 
-			score = new Score(System.getProperty("user.name"), "kamene",
+			score = new Score(System.getProperty("user.name"), "KAMENE",
 					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
 		} else if (field.getGameState() == GameState.EXIT) {
 			System.out.println("You have exited the game");

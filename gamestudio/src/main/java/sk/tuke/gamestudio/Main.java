@@ -17,6 +17,9 @@ import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
 import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
+import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
+import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
 
 @Configuration
 @SpringBootApplication
@@ -67,6 +70,21 @@ public class Main {
 		games.put(Games.KAMENE, consoleUIKamene());
 		games.put(Games.MINESWEEPER, consoleUIMines());
 		return games;
+	}
+	
+	@Bean
+	public CommentServiceSORM commentServiceSORM(){
+		return new CommentServiceSORM();
+	}
+	
+	@Bean
+	public RatingServiceSORM ratingServiceSORM(){
+		return new RatingServiceSORM();
+	}
+	
+	@Bean
+	public ScoreServiceSORM scoreServiceSORM(){
+		return new ScoreServiceSORM();
 	}
 
 }

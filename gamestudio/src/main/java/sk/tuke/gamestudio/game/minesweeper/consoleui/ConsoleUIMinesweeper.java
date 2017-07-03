@@ -83,7 +83,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		if (field.getState() == GameState.SOLVED) {
 			System.out.println("Congratulations! You have WON! :D ");
 			update();
-			score = new Score(System.getProperty("user.name"), "mines",
+			score = new Score(System.getProperty("user.name"), "MINESWEEPER",
 					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
 
 		} else if (field.getState() == GameState.FAILED) {

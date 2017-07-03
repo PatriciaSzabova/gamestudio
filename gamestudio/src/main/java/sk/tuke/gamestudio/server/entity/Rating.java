@@ -7,7 +7,7 @@ import sk.tuke.gamestudio.server.service.annotation.Table;
 
 @Table(name = "rating", createDrop = false)
 public class Rating {
-	
+
 	@Column(name = "id", primaryKey = true)
 	private int id;
 	@Column(name = "player")
@@ -18,6 +18,10 @@ public class Rating {
 	private int rating;
 	@Column(name = "ratedon")
 	private Date ratedon;
+	
+	public Rating(){
+		
+	}
 
 	public Rating(String player, String game, int rating, Date ratedon) {
 		super();
@@ -57,6 +61,14 @@ public class Rating {
 
 	public void setRatedon(Date ratedon) {
 		this.ratedon = ratedon;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

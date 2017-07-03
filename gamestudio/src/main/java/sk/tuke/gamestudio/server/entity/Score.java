@@ -7,7 +7,7 @@ import sk.tuke.gamestudio.server.service.annotation.Table;
 
 @Table(name = "score", createDrop = false)
 public class Score {
-	
+
 	@Column(name = "id", primaryKey = true)
 	private int id;
 	@Column(name = "player")
@@ -19,6 +19,10 @@ public class Score {
 	@Column(name = "playedon")
 	private Date playedon;
 	
+	public Score(){
+		
+	}
+
 	public Score(String player, String game, int points, Date playedon) {
 		super();
 		this.player = player;
@@ -58,14 +62,14 @@ public class Score {
 	public void setPlayedon(Date playedon) {
 		this.playedon = playedon;
 	}
-	
+
+	public int getId() {
+		return id;
+	}
+
 	@Override
 	public String toString() {
-		return "("+player + ", " + game + ", " + points + ", " + playedon+")";
+		return "(" + player + ", " + game + ", " + points + ", " + playedon + ")";
 	}
-	
-	
-	
-	
 
 }

@@ -20,17 +20,26 @@ import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
+import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
+import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
 
 public class GamestudioUI {
 
 	@Autowired
 	private Map<Games, GameUserInterface> allGames;
+	// @Autowired
+	// private ScoreServiceJDBC scoreService;
+	// @Autowired
+	// private CommentServiceJDBC commentService;
+	// @Autowired
+	// private RatingServiceJDBC ratingService;
 	@Autowired
-	private ScoreServiceJDBC scoreService;
+	private ScoreServiceSORM scoreService;
 	@Autowired
-	private CommentServiceJDBC commentService;
+	private CommentServiceSORM commentService;
 	@Autowired
-	private RatingServiceJDBC ratingService;
+	private RatingServiceSORM ratingService;
 
 	private String currentGamePlayed;
 
@@ -118,7 +127,8 @@ public class GamestudioUI {
 			}
 			int index = Integer.parseInt(input) - 1;
 			Games g = Games.values()[index];
-			allGames.get(g).newGameStarted();
+			gameScore = allGames.get(g).newGameStarted();
+			currentGamePlayed = g.name();
 		} else {
 			System.out.println("Wrong Input! Try again. ");
 			processInput();
@@ -132,7 +142,7 @@ public class GamestudioUI {
 		if (choice.toUpperCase().equals("Y")) {
 			System.out.println("Enter your comment:");
 			String userComment = readLine();
-			Comment cmt = new Comment(System.getProperty("user.name"), "kamene", userComment, getSQLCurrentDate());
+			Comment cmt = new Comment(System.getProperty("user.name"), currentGamePlayed, userComment, getSQLCurrentDate());
 			try {
 				commentService.addComment(cmt);
 			} catch (CommentException e) {

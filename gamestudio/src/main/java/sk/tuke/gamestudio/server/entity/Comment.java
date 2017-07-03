@@ -6,7 +6,7 @@ import sk.tuke.gamestudio.server.service.annotation.*;
 
 @Table(name = "comment", createDrop = false)
 public class Comment {
-	
+
 	@Column(name = "id", primaryKey = true)
 	private int id;
 	@Column(name = "player")
@@ -17,6 +17,10 @@ public class Comment {
 	private String comment;
 	@Column(name = "commentedon")
 	private Date commentedon;
+
+	public Comment() {
+
+	}
 
 	public Comment(String player, String game, String comment, Date commentedon) {
 		super();
@@ -58,10 +62,13 @@ public class Comment {
 		this.commentedon = commentedon;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	@Override
 	public String toString() {
-		return "(" + player + ", " + ", " + comment + ", " + commentedon
-				+ ")";
+		return "(" + player + ", " + ", " + comment + ", " + commentedon + ")";
 	}
 
 }
