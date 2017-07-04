@@ -1,9 +1,15 @@
 package sk.tuke.gamestudio.game.minesweeper.core;
 
 import java.util.Formatter;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import sk.tuke.gamestudio.game.GameState;
+import sk.tuke.gamestudio.game.minesweeper.entity.Command;
+import sk.tuke.gamestudio.game.minesweeper.entity.CommandType;
+import sk.tuke.gamestudio.game.minesweeper.entity.Gameplay;
+import sk.tuke.gamestudio.game.minesweeper.entity.MineCoordinate;
 
 /**
  * Field represents playing field and game logic.
@@ -34,6 +40,8 @@ public class Field {
 	 */
 	private GameState state = GameState.PLAYING;
 
+	private Gameplay gameplay;
+
 	/**
 	 * Constructor.
 	 *
@@ -49,7 +57,9 @@ public class Field {
 		this.columnCount = columnCount;
 		this.mineCount = mineCount;
 		tiles = new Tile[rowCount][columnCount];
-
+		gameplay = new Gameplay();
+		gameplay.setColumnCount(columnCount);
+		gameplay.setRowCount(rowCount);
 		generate();
 	}
 
@@ -77,6 +87,10 @@ public class Field {
 		this.state = state;
 	}
 
+	public Gameplay getGameplay() {
+		return gameplay;
+	}
+
 	/**
 	 * Opens tile at specified indices.
 	 *
@@ -85,13 +99,22 @@ public class Field {
 	 * @param column
 	 *            column number
 	 */
+
 	public void openTile(int row, int column) {
+		if (gameplay != null) {
+			gameplay.addCommand(new Command(CommandType.OPEN, row, column));
+		}
+		openTileRec(row, column);
+	}
+
+	private void openTileRec(int row, int column) {
 		if (state.equals(GameState.FAILED)) {
 			return;
 		}
 		Tile tile = tiles[row][column];
 		if (tile.getState() == Tile.State.CLOSED) {
 			tile.setState(Tile.State.OPEN);
+
 			if (tile instanceof Mine) {
 				state = GameState.FAILED;
 				return;
@@ -115,7 +138,7 @@ public class Field {
 					int actColumn = column + columnOffset;
 					if (actColumn >= 0 && actColumn < columnCount) {
 						if (tiles[actRow][actColumn] instanceof Clue) {
-							openTile(actRow, actColumn);
+							openTileRec(actRow, actColumn);
 						}
 					}
 				}
@@ -132,6 +155,9 @@ public class Field {
 	 *            column number
 	 */
 	public void markTile(int row, int column) {
+		if (gameplay != null) {
+			gameplay.addCommand(new Command(CommandType.MARK, row, column));
+		}
 		Tile tile = tiles[row][column];
 		if (tile.getState() == Tile.State.CLOSED) {
 			tile.setState(Tile.State.MARKED);
@@ -148,6 +174,7 @@ public class Field {
 		Random r = new Random();
 		int randomRow, randomColumn;
 		int counter = 0;
+		Set<MineCoordinate> coordinates = new HashSet<>();
 
 		do {
 			randomRow = r.nextInt(rowCount);
@@ -155,6 +182,7 @@ public class Field {
 			if (!(tiles[randomRow][randomColumn] instanceof Mine)) {
 				tiles[randomRow][randomColumn] = new Mine();
 				counter++;
+				coordinates.add(new MineCoordinate(randomRow, randomColumn));
 			}
 
 		} while (counter < mineCount);
@@ -168,6 +196,8 @@ public class Field {
 
 			}
 		}
+
+		gameplay.setMineCoordinates(coordinates);
 
 	}
 

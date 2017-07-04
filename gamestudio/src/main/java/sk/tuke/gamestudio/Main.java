@@ -18,6 +18,7 @@ import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.GameplayServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
 import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
@@ -101,5 +102,10 @@ public class Main {
 	@Bean
 	public CommentServiceJPA commentServiceJPA(){
 		return new CommentServiceJPA();
+	}
+	
+	@Bean
+	public GameplayServiceJPA gameplayServiceJPA(){
+		return new GameplayServiceJPA();
 	}
 }

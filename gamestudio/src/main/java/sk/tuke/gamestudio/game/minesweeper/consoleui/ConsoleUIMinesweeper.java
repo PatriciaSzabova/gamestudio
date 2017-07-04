@@ -10,6 +10,9 @@ import java.util.Formatter;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import sk.tuke.gamestudio.game.minesweeper.Minesweeper;
 import sk.tuke.gamestudio.game.minesweeper.Settings;
 import sk.tuke.gamestudio.game.GameState;
@@ -17,7 +20,9 @@ import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.WrongFormatException;
 import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
+import sk.tuke.gamestudio.game.minesweeper.entity.Gameplay;
 import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.JPA.GameplayServiceJPA;
 
 /**
  * Console user interface.
@@ -34,6 +39,9 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 
 	private int randomRow;
 	private int randomCol;
+	
+	@Autowired
+	private GameplayServiceJPA gameplayService;
 
 	private RandomOpenThread thread = new RandomOpenThread();
 
@@ -91,6 +99,10 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 			update();
 		} else if (field.getState() == GameState.EXIT) {
 			System.out.println("You have exited the game");
+		}
+		Gameplay gameplay = field.getGameplay();
+		if(gameplay !=null){
+			gameplayService.save(gameplay);
 		}
 		return score;
 
