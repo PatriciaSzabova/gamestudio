@@ -63,6 +63,15 @@ public class Field {
 		generate();
 	}
 
+	public Field(int rowCount, int columnCount, Set<MineCoordinate> mineCoordinates) {
+		this.rowCount = rowCount;
+		this.columnCount = columnCount;
+		this.mineCount = mineCoordinates.size();
+		tiles = new Tile[rowCount][columnCount];
+		reGenerate(mineCoordinates);
+
+	}
+
 	public int getRowCount() {
 		return rowCount;
 	}
@@ -186,7 +195,12 @@ public class Field {
 			}
 
 		} while (counter < mineCount);
+		fillWithClues();
+		gameplay.setMineCoordinates(coordinates);
 
+	}
+
+	private void fillWithClues() {
 		for (int j = 0; j < rowCount; j++) {
 			for (int k = 0; k < columnCount; k++) {
 				if (!(tiles[j][k] instanceof Mine)) {
@@ -196,9 +210,17 @@ public class Field {
 
 			}
 		}
+	}
 
-		gameplay.setMineCoordinates(coordinates);
+	private void reGenerate(Set<MineCoordinate> mineCoordinates) {
+		setMines(mineCoordinates);
+		fillWithClues();
+	}
 
+	private void setMines(Set<MineCoordinate> mineCoordinates) {
+		for (MineCoordinate ms : mineCoordinates) {
+			tiles[ms.getRow()][ms.getColumn()] = new Mine();
+		}
 	}
 
 	/**

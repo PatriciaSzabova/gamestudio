@@ -21,8 +21,8 @@ import sk.tuke.gamestudio.game.WrongFormatException;
 import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
 import sk.tuke.gamestudio.game.minesweeper.entity.Gameplay;
+import sk.tuke.gamestudio.game.minesweeper.service.GameplayServiceJPA;
 import sk.tuke.gamestudio.server.entity.Score;
-import sk.tuke.gamestudio.server.service.JPA.GameplayServiceJPA;
 
 /**
  * Console user interface.
@@ -39,9 +39,12 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 
 	private int randomRow;
 	private int randomCol;
-	
+	@Autowired
+	private ReplayConsoleUI replayUI;
+
 	@Autowired
 	private GameplayServiceJPA gameplayService;
+	boolean isReplay;
 
 	private RandomOpenThread thread = new RandomOpenThread();
 
@@ -75,34 +78,36 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 		} catch (WrongFormatException e) {
 			e.printStackTrace();
 		}
-		settings = Minesweeper.getInstance().getSettings();
-		Field field = new Field(settings.getRowCount(), settings.getColumnCount(), settings.getMineCount());
-		synchronized (this) {
-			thread.start();
-		}
+		if (!isReplay) {
+			settings = Minesweeper.getInstance().getSettings();
+			Field field = new Field(settings.getRowCount(), settings.getColumnCount(), settings.getMineCount());
+			this.field = field;
+			synchronized (this) {
+				thread.start();
+			}
 
-		this.field = field;
-		do {
-			update();
-			processInput();
+			do {
+				update();
+				processInput();
 
-		} while (field.getState() == GameState.PLAYING);
+			} while (field.getState() == GameState.PLAYING);
 
-		if (field.getState() == GameState.SOLVED) {
-			System.out.println("Congratulations! You have WON! :D ");
-			update();
-			score = new Score(System.getProperty("user.name"), "MINESWEEPER",
-					1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
+			if (field.getState() == GameState.SOLVED) {
+				System.out.println("Congratulations! You have WON! :D ");
+				update();
+				score = new Score(System.getProperty("user.name"), "MINESWEEPER",
+						1000 - (Minesweeper.getInstance().getPlayingSeconds() / 100), getSQLCurrentDate());
 
-		} else if (field.getState() == GameState.FAILED) {
-			System.out.println("You have FAILED! :(");
-			update();
-		} else if (field.getState() == GameState.EXIT) {
-			System.out.println("You have exited the game");
-		}
-		Gameplay gameplay = field.getGameplay();
-		if(gameplay !=null){
-			gameplayService.save(gameplay);
+			} else if (field.getState() == GameState.FAILED) {
+				System.out.println("You have FAILED! :(");
+				update();
+			} else if (field.getState() == GameState.EXIT) {
+				System.out.println("You have exited the game");
+			}
+			Gameplay gameplay = field.getGameplay();
+			if (gameplay != null) {
+				gameplayService.save(gameplay);
+			}
 		}
 		return score;
 
@@ -169,10 +174,7 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 	public void chooseFieldSize() throws WrongFormatException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Chose your game difficulty: \n").append("1. BEGINNER \n").append("2. INTERMEDIATE \n")
-				.append("3. EXPERT \n").append("4. CUSTOM \n");// .append("5.
-																// LOAD LAST
-																// PLAYED
-																// SETTNG");
+				.append("3. EXPERT \n").append("4. CUSTOM \n").append("5. REPLAY");
 		System.out.println(sb.toString());
 		String choice = readLine();
 		int selectionNumber = Integer.parseInt(choice);
@@ -198,13 +200,10 @@ public class ConsoleUIMinesweeper implements GameUserInterface {
 			int mineCount = Integer.parseInt(mineNumber);
 			Minesweeper.getInstance().setSettings(new Settings(rowCount, columnCount, mineCount));
 			break;
-		// case 5:
-		// try {
-		// loadLastField();
-		// } catch (WrongFormatException e) {
-		// e.printStackTrace();
-		// }
-		// break;
+		case 5:
+			replayUI.play(759);
+			isReplay = true;
+			break;
 		default:
 			System.out.println("Wrong input");
 			break;

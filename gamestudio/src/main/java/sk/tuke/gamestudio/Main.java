@@ -14,11 +14,12 @@ import sk.tuke.gamestudio.game.Games;
 import sk.tuke.gamestudio.game.GamestudioUI;
 import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
+import sk.tuke.gamestudio.game.minesweeper.consoleui.ReplayConsoleUI;
+import sk.tuke.gamestudio.game.minesweeper.service.GameplayServiceJPA;
 import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
 import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
-import sk.tuke.gamestudio.server.service.JPA.GameplayServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
 import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
@@ -107,5 +108,10 @@ public class Main {
 	@Bean
 	public GameplayServiceJPA gameplayServiceJPA(){
 		return new GameplayServiceJPA();
+	}
+	
+	@Bean
+	public ReplayConsoleUI replayConsole(){
+		return new ReplayConsoleUI();
 	}
 }

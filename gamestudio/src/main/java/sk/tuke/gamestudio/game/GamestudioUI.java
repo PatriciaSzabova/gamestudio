@@ -17,15 +17,10 @@ import sk.tuke.gamestudio.server.entity.Score;
 import sk.tuke.gamestudio.server.service.CommentException;
 import sk.tuke.gamestudio.server.service.RatingException;
 import sk.tuke.gamestudio.server.service.ScoreException;
-import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
-import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
-import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
-import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
-import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
-import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
+
 
 public class GamestudioUI {
 

@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.service.JPA;
+package sk.tuke.gamestudio.game.minesweeper.service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

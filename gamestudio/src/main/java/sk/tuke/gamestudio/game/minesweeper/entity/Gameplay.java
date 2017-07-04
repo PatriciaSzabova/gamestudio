@@ -66,4 +66,12 @@ public class Gameplay {
 		commands.add(command);
 	}
 
+	public Set<MineCoordinate> getMineCoordinates() {
+		return mineCoordinates;
+	}
+
+	public List<Command> getCommands() {
+		return commands;
+	}
+
 }
