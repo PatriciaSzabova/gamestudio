@@ -44,21 +44,6 @@ public class Main {
 		return new GamestudioUI();
 	}
 
-//	@Bean
-//	public ScoreServiceJDBC scoreService() {
-//		return new ScoreServiceJDBC();
-//	}
-//
-//	@Bean
-//	public CommentServiceJDBC commentService() {
-//		return new CommentServiceJDBC();
-//	}
-//
-//	@Bean
-//	public RatingServiceJDBC ratingService() {
-//		return new RatingServiceJDBC();
-//	}
-
 	@Bean
 	public ConsoleUIKamene consoleUIKamene() {
 		return new ConsoleUIKamene();
@@ -76,42 +61,59 @@ public class Main {
 		games.put(Games.MINESWEEPER, consoleUIMines());
 		return games;
 	}
-	
-//	@Bean
-//	public CommentServiceSORM commentServiceSORM(){
-//		return new CommentServiceSORM();
-//	}
-//	
-//	@Bean
-//	public RatingServiceSORM ratingServiceSORM(){
-//		return new RatingServiceSORM();
-//	}
-//	
-//	@Bean
-//	public ScoreServiceSORM scoreServiceSORM(){
-//		return new ScoreServiceSORM();
-//	}
+
+	// @Bean
+	// public ScoreServiceJDBC scoreService() {
+	// return new ScoreServiceJDBC();
+	// }
+	//
+	// @Bean
+	// public CommentServiceJDBC commentService() {
+	// return new CommentServiceJDBC();
+	// }
+	//
+	// @Bean
+	// public RatingServiceJDBC ratingService() {
+	// return new RatingServiceJDBC();
+	// }
+
+	// @Bean
+	// public CommentServiceSORM commentServiceSORM(){
+	// return new CommentServiceSORM();
+	// }
+	//
+	// @Bean
+	// public RatingServiceSORM ratingServiceSORM(){
+	// return new RatingServiceSORM();
+	// }
+	//
+	// @Bean
+	// public ScoreServiceSORM scoreServiceSORM(){
+	// return new ScoreServiceSORM();
+	// }
 
 	@Bean
-	public ScoreServiceJPA scoreServiceJPA(){
+	public ScoreServiceJPA scoreServiceJPA() {
 		return new ScoreServiceJPA();
 	}
-	@Bean 
-	public RatingServiceJPA ratingServiceJPA(){
+
+	@Bean
+	public RatingServiceJPA ratingServiceJPA() {
 		return new RatingServiceJPA();
 	}
+
 	@Bean
-	public CommentServiceJPA commentServiceJPA(){
+	public CommentServiceJPA commentServiceJPA() {
 		return new CommentServiceJPA();
 	}
-	
+
 	@Bean
-	public GameplayServiceJPA gameplayServiceJPA(){
+	public GameplayServiceJPA gameplayServiceJPA() {
 		return new GameplayServiceJPA();
 	}
-	
+
 	@Bean
-	public ReplayConsoleUI replayConsole(){
+	public ReplayConsoleUI replayConsole() {
 		return new ReplayConsoleUI();
 	}
 }
