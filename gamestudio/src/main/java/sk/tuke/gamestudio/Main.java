@@ -3,9 +3,11 @@ package sk.tuke.gamestudio;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.cxf.frontend.spring.ClientProxyFactoryBeanDefinitionParser.SpringClientProxyFactoryBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,22 +18,22 @@ import sk.tuke.gamestudio.game.kamene.consoleui.ConsoleUIKamene;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ConsoleUIMinesweeper;
 import sk.tuke.gamestudio.game.minesweeper.consoleui.ReplayConsoleUI;
 import sk.tuke.gamestudio.game.minesweeper.service.GameplayServiceJPA;
-import sk.tuke.gamestudio.server.service.JDBC.CommentServiceJDBC;
-import sk.tuke.gamestudio.server.service.JDBC.RatingServiceJDBC;
-import sk.tuke.gamestudio.server.service.JDBC.ScoreServiceJDBC;
+import sk.tuke.gamestudio.server.service.CommentService;
+import sk.tuke.gamestudio.server.service.RatingService;
+import sk.tuke.gamestudio.server.service.ScoreService;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
-import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
-import sk.tuke.gamestudio.server.service.SORM.CommentServiceSORM;
-import sk.tuke.gamestudio.server.service.SORM.RatingServiceSORM;
-import sk.tuke.gamestudio.server.service.SORM.ScoreServiceSORM;
+import sk.tuke.gamestudio.server.service.REST.CommentServiceRESTClient;
+import sk.tuke.gamestudio.server.service.REST.RatingServiceRESTClient;
+import sk.tuke.gamestudio.server.service.REST.ScoreServiceRESTClient;
 
 @Configuration
 @SpringBootApplication
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(Main.class, args);
+		//SpringApplication.run(Main.class, args);
+		new SpringApplicationBuilder(Main.class).web(false).run(args);
 	}
 
 	@Bean
@@ -62,49 +64,21 @@ public class Main {
 		return games;
 	}
 
-	// @Bean
-	// public ScoreServiceJDBC scoreService() {
-	// return new ScoreServiceJDBC();
-	// }
-	//
-	// @Bean
-	// public CommentServiceJDBC commentService() {
-	// return new CommentServiceJDBC();
-	// }
-	//
-	// @Bean
-	// public RatingServiceJDBC ratingService() {
-	// return new RatingServiceJDBC();
-	// }
-
-	// @Bean
-	// public CommentServiceSORM commentServiceSORM(){
-	// return new CommentServiceSORM();
-	// }
-	//
-	// @Bean
-	// public RatingServiceSORM ratingServiceSORM(){
-	// return new RatingServiceSORM();
-	// }
-	//
-	// @Bean
-	// public ScoreServiceSORM scoreServiceSORM(){
-	// return new ScoreServiceSORM();
-	// }
-
 	@Bean
-	public ScoreServiceJPA scoreServiceJPA() {
-		return new ScoreServiceJPA();
+	public ScoreService scoreService() {
+		return new ScoreServiceRESTClient();
 	}
 
 	@Bean
-	public RatingServiceJPA ratingServiceJPA() {
-		return new RatingServiceJPA();
+	public RatingService ratingService() {
+		return new RatingServiceRESTClient();
+		//return new RatingServiceJPA();
 	}
 
 	@Bean
-	public CommentServiceJPA commentServiceJPA() {
-		return new CommentServiceJPA();
+	public CommentService commentService() {
+		//return new CommentServiceJPA();
+		return new CommentServiceRESTClient();
 	}
 
 	@Bean

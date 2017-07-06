@@ -15,8 +15,11 @@ import sk.tuke.gamestudio.server.entity.Comment;
 import sk.tuke.gamestudio.server.entity.Rating;
 import sk.tuke.gamestudio.server.entity.Score;
 import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
 import sk.tuke.gamestudio.server.service.RatingException;
+import sk.tuke.gamestudio.server.service.RatingService;
 import sk.tuke.gamestudio.server.service.ScoreException;
+import sk.tuke.gamestudio.server.service.ScoreService;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
@@ -25,25 +28,13 @@ import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
 public class GamestudioUI {
 
 	@Autowired
-	private Map<Games, GameUserInterface> allGames;
-	// @Autowired
-	// private ScoreServiceJDBC scoreService;
-	// @Autowired
-	// private CommentServiceJDBC commentService;
-	// @Autowired
-	// private RatingServiceJDBC ratingService;
-	// @Autowired
-	// private ScoreServiceSORM scoreService;
-	// @Autowired
-	// private CommentServiceSORM commentService;
-	// @Autowired
-	// private RatingServiceSORM ratingService;
+	private Map<Games, GameUserInterface> allGames;	
 	@Autowired
-	private ScoreServiceJPA scoreService;
+	private ScoreService scoreService;
 	@Autowired
-	private RatingServiceJPA ratingService;
+	private RatingService ratingService;
 	@Autowired
-	private CommentServiceJPA commentService;
+	private CommentService commentService;
 
 	private String currentGamePlayed;
 
