@@ -166,13 +166,15 @@ public class Field implements Serializable {
 	 */
 	public void moveDefaultTile(int row, int col) throws InvalidMoveException {
 		getDefaultTilePosition();
+
 		if (row < 0 || col < 0 || row > rowCount - 1 || col > columnCount - 1) {
 			throw new InvalidMoveException("Cannot move there!");
 		} else {
-
-			int temp = tiles[row][col].getNumber();
-			tiles[row][col].setNumber(tiles[defaultRow][defaultCol].getNumber());
-			tiles[defaultRow][defaultCol].setNumber(temp);
+			if (checkMoveDistance(row, col, defaultRow, defaultCol)) {
+				int temp = tiles[row][col].getNumber();
+				tiles[row][col].setNumber(tiles[defaultRow][defaultCol].getNumber());
+				tiles[defaultRow][defaultCol].setNumber(temp);
+			}
 		}
 		if (isSolved()) {
 			setGameState(GameState.SOLVED);
@@ -192,6 +194,13 @@ public class Field implements Serializable {
 				}
 			}
 		}
+	}
+
+	public boolean checkMoveDistance(int row, int col, int defRow, int defCol) throws InvalidMoveException {
+		if ((Math.abs(row - defRow) == 1 && col == defCol) || (Math.abs(col - defCol) == 1 && row == defRow)) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

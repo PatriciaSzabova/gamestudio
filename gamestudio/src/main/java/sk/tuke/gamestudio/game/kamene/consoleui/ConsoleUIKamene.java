@@ -10,7 +10,7 @@ import java.util.Formatter;
 import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.GameUserInterface;
 import sk.tuke.gamestudio.game.WrongFormatException;
-import sk.tuke.gamestudio.game.kamene.Kamene;
+import sk.tuke.gamestudio.game.kamene.Stones;
 import sk.tuke.gamestudio.game.kamene.Settings;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
@@ -57,7 +57,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 		sb.append("Let's play a game,").append(System.getProperty("user.name")).append("\n");
 		System.out.println(sb.toString());
 		chooseFieldSize();
-		settings = Kamene.getInstance().getSettings();
+		settings = Stones.getInstance().getSettings();
 		Field field = new Field(settings.getRowCount(), settings.getColumnCount());
 
 		this.field = field;
@@ -71,8 +71,8 @@ public class ConsoleUIKamene implements GameUserInterface {
 			System.out.println("Congratulations! You have won :)");
 			update();
 
-			score = new Score(System.getProperty("user.name"), "KAMENE",
-					1000 - (Kamene.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
+			score = new Score(System.getProperty("user.name"), "STONES",
+					1000 - (Stones.getInstance().getPlayingSeconds() + moveCounter), getSQLCurrentDate());
 		} else if (field.getGameState() == GameState.EXIT) {
 			System.out.println("You have exited the game");
 		}
@@ -86,7 +86,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 	@Override
 	public void update() {
 		Formatter f = new Formatter();
-		f.format("Playing time: %s%n", Kamene.getInstance().getPlayingSeconds());
+		f.format("Playing time: %s%n", Stones.getInstance().getPlayingSeconds());
 		System.out.println(f.toString());
 		System.out.println(field);
 
@@ -122,7 +122,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 			field.save();
 			field.setGameState(GameState.EXIT);
 		} else if (input.equals("NEW")) {
-			Kamene.getInstance().startNewGame();
+			Stones.getInstance().startNewGame();
 		} else if (input.equals("W") || input.equals("UP")) {
 			try {
 				field.moveDefaultTile(field.getDefaultRow() - 1, field.getDefaultCol());
@@ -176,7 +176,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 		}
 		switch (selectionNumber) {
 		case 1:
-			Kamene.getInstance().setSettings(Settings.DEFAULT);
+			Stones.getInstance().setSettings(Settings.DEFAULT);
 			break;
 		case 2:
 			System.out.println("Enter number of rows:");
@@ -191,7 +191,7 @@ public class ConsoleUIKamene implements GameUserInterface {
 			if (columnCount == 0 || columnCount < 2) {
 				System.out.println("Chose a bigger field!");
 			}
-			Kamene.getInstance().setSettings(new Settings(rowCount, columnCount));
+			Stones.getInstance().setSettings(new Settings(rowCount, columnCount));
 			break;
 		default:
 			System.out.println("Wrong Input! Try again.");

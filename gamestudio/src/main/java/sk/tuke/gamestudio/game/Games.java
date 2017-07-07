@@ -4,6 +4,6 @@ public enum Games {
 
 	MINESWEEPER,
 
-	KAMENE
+	STONES
 
 }

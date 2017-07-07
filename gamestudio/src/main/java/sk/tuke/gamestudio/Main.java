@@ -59,7 +59,7 @@ public class Main {
 	@Bean
 	public Map<Games, GameUserInterface> games() {
 		Map<Games, GameUserInterface> games = new HashMap<>();
-		games.put(Games.KAMENE, consoleUIKamene());
+		games.put(Games.STONES, consoleUIKamene());
 		games.put(Games.MINESWEEPER, consoleUIMines());
 		return games;
 	}

@@ -9,11 +9,11 @@ import sk.tuke.gamestudio.game.WrongFormatException;
  * @author P3502714
  *
  */
-public class Kamene {
+public class Stones {
 	/** User interface */
 //	private GameUserInterface userInterface;
 
-	private static Kamene instance;
+	private static Stones instance;
 
 	/** Starting time of the game */
 	private long startMillis;
@@ -24,7 +24,7 @@ public class Kamene {
 	/**
 	 * Constructor
 	 */
-	public Kamene() {
+	public Stones() {
 		instance = this;
 		// GameUserInterface = new ConsoleUI();
 		// try {
@@ -42,9 +42,9 @@ public class Kamene {
 		settings = this.getSettings();
 	}
 
-	public static Kamene getInstance() {
+	public static Stones getInstance() {
 		if (instance == null) {
-			return new Kamene();
+			return new Stones();
 		}
 		return instance;
 

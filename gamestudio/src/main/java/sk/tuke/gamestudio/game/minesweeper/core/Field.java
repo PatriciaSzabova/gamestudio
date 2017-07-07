@@ -167,6 +167,9 @@ public class Field {
 		if (gameplay != null) {
 			gameplay.addCommand(new Command(CommandType.MARK, row, column));
 		}
+		if (state.equals(GameState.FAILED)) {
+			return;
+		}
 		Tile tile = tiles[row][column];
 		if (tile.getState() == Tile.State.CLOSED) {
 			tile.setState(Tile.State.MARKED);
