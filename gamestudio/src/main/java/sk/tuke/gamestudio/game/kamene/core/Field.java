@@ -132,7 +132,6 @@ public class Field implements Serializable {
 		int rowOfLast = -1, colOfLast = -1;
 		int randomIndex = 0;
 		List<Integer> numbers = new ArrayList<>();
-
 		for (int i = 0; i <= (rowCount * columnCount) - 1; i++) {
 			numbers.add(i + 1);
 		}
