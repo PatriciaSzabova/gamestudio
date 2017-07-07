@@ -19,16 +19,23 @@ public class StonesController {
 	private Field field = new Field(4, 4);
 
 	@RequestMapping("/stones")
-	public String Stones(@RequestParam(name = "row", required = false) String row,
+	public String Stones(@RequestParam(name = "command", required = false) String command,
+			@RequestParam(name = "row", required = false) String row,
 			@RequestParam(name = "column", required = false) String column, Model model) {
-		try {
-			int rowInt = Integer.parseInt(row);
-			int colInt = Integer.parseInt(column);
-			field.moveDefaultTile(rowInt, colInt);
-		} catch (NumberFormatException e) {
-			// e.printStackTrace();
-		} catch (InvalidMoveException e) {
-			// e.printStackTrace();
+		if (command != null) {
+			if ("new".equals(command)) {
+				field = new Field(4, 4);
+			}
+		} else {
+			try {
+				int rowInt = Integer.parseInt(row);
+				int colInt = Integer.parseInt(column);
+				field.moveDefaultTile(rowInt, colInt);
+			} catch (NumberFormatException e) {
+				// e.printStackTrace();
+			} catch (InvalidMoveException e) {
+				// e.printStackTrace();
+			}
 		}
 		model.addAttribute("stonesController", this);
 		return "stones";
