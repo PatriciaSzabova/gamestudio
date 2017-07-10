@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.minesweeper.core;
 
+import java.util.Date;
 import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Random;
@@ -41,6 +42,7 @@ public class Field {
 	private GameState state = GameState.PLAYING;
 
 	private Gameplay gameplay;
+	private long startMillis;
 
 	/**
 	 * Constructor.
@@ -60,6 +62,7 @@ public class Field {
 		gameplay = new Gameplay();
 		gameplay.setColumnCount(columnCount);
 		gameplay.setRowCount(rowCount);
+		startMillis = System.currentTimeMillis();
 		generate();
 	}
 
@@ -295,6 +298,19 @@ public class Field {
 			}
 		}
 		return f.toString();
+	}
+
+	public java.sql.Date getSQLCurrentDate() {
+		return new java.sql.Date(new Date().getTime());
+	}
+
+	public int getPlayingSeconds() {
+		return (int) ((System.currentTimeMillis() - startMillis) / 1000);
+	}
+
+	public int getScore() {
+		int score = rowCount * columnCount * 3 - getPlayingSeconds();
+		return score < 0 ? 0 : score;
 	}
 
 }

@@ -1,6 +1,6 @@
 package sk.tuke.gamestudio.server.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,13 +17,13 @@ public class Rating {
 	@GeneratedValue
 	// @Column(name = "id", primaryKey = true)
 	private int id;
-	//@Column(name = "player")
+	// @Column(name = "player")
 	private String player;
-	//@Column(name = "game")
+	// @Column(name = "game")
 	private String game;
-	//@Column(name = "rating")
+	// @Column(name = "rating")
 	private int rating;
-	//@Column(name = "ratedon")
+	// @Column(name = "ratedon")
 	private Date ratedon;
 
 	public Rating() {

@@ -1,7 +1,9 @@
 package sk.tuke.gamestudio.server.controller;
 
+import java.util.Date;
 import java.util.Formatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,9 @@ import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
 import sk.tuke.gamestudio.game.kamene.core.Tile;
+import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.ScoreException;
+import sk.tuke.gamestudio.server.service.ScoreService;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
@@ -20,6 +25,10 @@ public class StonesController {
 
 	private Field field = new Field(4, 4);
 	private String message = "";
+	@Autowired
+	private ScoreService scoreService;
+	@Autowired
+	private UserController userController;
 
 	@RequestMapping("/stones")
 	public String Stones(@RequestParam(name = "command", required = false) String command,
@@ -42,6 +51,12 @@ public class StonesController {
 			}
 			if (field.getGameState() == GameState.SOLVED) {
 				message = "Congratulations. You have won! :)";
+				try {
+					scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "STONES",
+							field.getScore(), new Date()));
+				} catch (ScoreException e) {
+					// e.printStackTrace();
+				}
 			}
 		}
 		model.addAttribute("stonesController", this);

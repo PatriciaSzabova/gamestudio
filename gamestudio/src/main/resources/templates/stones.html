@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" href="/css/stylesheet.css" />
 <title>Stones</title>
 </head>
 <body>
-
+	<div th:replace="header::login_bar" />
 	<h1>Stones</h1>
 
 	<p th:utext='${stonesController.renderField()}' />
@@ -14,7 +14,7 @@
 	<br>
 	<a href="?command=new">New Game</a>
 	</br>
-	
+
 
 </body>
 </html>

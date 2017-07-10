@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.server.controller;
 
+import java.util.Date;
 import java.util.Formatter;
 
 import javax.jws.WebParam;
@@ -16,6 +17,7 @@ import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.minesweeper.core.Clue;
 import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
+import sk.tuke.gamestudio.server.entity.Score;
 import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.ScoreService;
 
@@ -29,6 +31,8 @@ public class MinesController {
 	private String message = "";
 	@Autowired
 	private ScoreService scoreService;
+	@Autowired
+	private UserController userController;
 
 	@RequestMapping("/minesweeper")
 	public String mines(@RequestParam(name = "command", required = false) String command,
@@ -59,12 +63,20 @@ public class MinesController {
 					message = "You have failed :(";
 				} else {
 					message = "Congratulations. You have won! :)";
+					if (userController.isLogged()) {
+						try {
+							scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "MINESWEEPER",
+									field.getScore(), new Date()));
+						} catch (ScoreException e) {
+							//e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
 		try {
 			model.addAttribute("scores", scoreService.getBestScores("MINESWEEPER"));
-		} catch (ScoreException e) {			
+		} catch (ScoreException e) {
 			e.printStackTrace();
 		}
 		model.addAttribute("minesController", this);

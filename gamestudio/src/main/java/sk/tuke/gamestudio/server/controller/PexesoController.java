@@ -1,7 +1,9 @@
 package sk.tuke.gamestudio.server.controller;
 
+import java.util.Date;
 import java.util.Formatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,10 @@ import org.springframework.web.context.WebApplicationContext;
 import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.pexeso.core.Field;
 import sk.tuke.gamestudio.game.pexeso.core.Tile;
+import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.entity.User;
+import sk.tuke.gamestudio.server.service.ScoreException;
+import sk.tuke.gamestudio.server.service.ScoreService;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
@@ -19,6 +25,10 @@ public class PexesoController {
 
 	private Field field = new Field(3, 4);
 	private String message = "";
+	@Autowired
+	private ScoreService scoreService;
+	@Autowired
+	private UserController userController;
 
 	@RequestMapping("/pexeso")
 	public String pexeso(@RequestParam(name = "command", required = false) String command,
@@ -37,15 +47,22 @@ public class PexesoController {
 			} catch (NumberFormatException e) {
 				// e.printStackTrace();
 			}
-			if(field.getGameState() == GameState.SOLVED){
+			if (field.getGameState() == GameState.SOLVED) {
 				message = "Congratulations. You have won! :)";
+				try {
+					scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "PEXESO",
+							field.getScore(), new Date()));
+				} catch (ScoreException e) {
+					// e.printStackTrace();
+				}
+
 			}
 		}
 
 		model.addAttribute("pexesoController", this);
 		return "pexeso";
 	}
-	
+
 	public String getMessage() {
 		return message;
 	}

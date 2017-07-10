@@ -7,6 +7,8 @@
 </head>
 <body>
 
+	<div th:replace="header::login_bar" />
+
 	<h1>Minesweeper</h1>
 
 	<p th:utext='${minesController.renderField()}' />

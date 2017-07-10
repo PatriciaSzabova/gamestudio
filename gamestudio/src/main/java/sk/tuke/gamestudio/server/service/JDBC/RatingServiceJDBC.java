@@ -27,7 +27,7 @@ public class RatingServiceJDBC implements RatingService {
 		if (existsInDB(rating.getGame(), rating.getPlayer())) {
 			updateRating(rating.getRating(), rating.getPlayer(), rating.getGame());
 		} else {
-			insertToDb(rating);
+			//insertToDb(rating);
 		}
 	}
 
@@ -43,18 +43,18 @@ public class RatingServiceJDBC implements RatingService {
 		return selectedRating;
 	}
 
-	private void insertToDb(Rating rating) {
-		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
-				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(INSERT_QUERY)) {
-			pstm.setString(1, rating.getPlayer());
-			pstm.setString(2, rating.getGame());
-			pstm.setInt(3, rating.getRating());
-			pstm.setDate(4, rating.getRatedon());
-			pstm.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void insertToDb(Rating rating) {
+//		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
+//				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(INSERT_QUERY)) {
+//			pstm.setString(1, rating.getPlayer());
+//			pstm.setString(2, rating.getGame());
+//			pstm.setInt(3, rating.getRating());
+//			pstm.setDate(4, rating.getRatedon());
+//			pstm.execute();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	private void selectFromDB(String game, String player) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,

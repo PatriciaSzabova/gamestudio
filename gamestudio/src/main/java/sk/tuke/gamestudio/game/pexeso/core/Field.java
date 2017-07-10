@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.pexeso.core;
 
+import java.util.Date;
 import java.util.Random;
 
 import org.hibernate.sql.SelectValues;
@@ -16,6 +17,7 @@ public class Field {
 	Tile secondOpened;
 	boolean isPair;
 	int openedPairs;
+	private long startMillis;
 
 	private GameState gameState = GameState.PLAYING;
 
@@ -23,7 +25,7 @@ public class Field {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		tiles = new Tile[rowCount][columnCount];
-
+		startMillis = System.currentTimeMillis();
 		generate();
 	}
 
@@ -152,6 +154,19 @@ public class Field {
 
 	private boolean isSolved() {
 		return ((rowCount * columnCount) / 2) - 1 == openedPairs;
+	}
+
+	public java.sql.Date getSQLCurrentDate() {
+		return new java.sql.Date(new Date().getTime());
+	}
+
+	public int getPlayingSeconds() {
+		return (int) ((System.currentTimeMillis() - startMillis) / 1000);
+	}
+
+	public int getScore() {
+		int score = rowCount * columnCount * 3 - getPlayingSeconds();
+		return score < 0 ? 0 : score;
 	}
 
 }

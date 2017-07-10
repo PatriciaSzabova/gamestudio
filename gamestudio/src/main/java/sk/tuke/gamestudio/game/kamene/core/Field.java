@@ -49,6 +49,7 @@ public class Field implements Serializable {
 	 * Column number of the default tile.
 	 */
 	private int defaultCol;
+	private long startMillis;
 
 	/**
 	 * Save file.
@@ -68,7 +69,7 @@ public class Field implements Serializable {
 		this.rowCount = rowCount;
 		this.columnCount = columnCount;
 		tiles = new Tile[rowCount][columnCount];
-
+		startMillis = System.currentTimeMillis();
 		generate();
 		getDefaultTilePosition();
 	}
@@ -153,31 +154,31 @@ public class Field implements Serializable {
 		tiles[rowOfLast][colOfLast].setNumber(-1);
 	}
 
-//	private void generate() {
-//		int counter = 1;
-//		for (int row = 0; row < rowCount; row++) {
-//			for (int col = 0; col < columnCount; col++) {
-//				tiles[row][col] = new Tile();
-//				tiles[row][col].setNumber(counter);
-//				counter++;
-//			}
-//		}
-//		tiles[rowCount - 1][columnCount - 1].setNumber(-1);
-//		getDefaultTilePosition();
-//		shuffle();
-//	}
-//	
-//	private void shuffle(){
-//		int row = defaultRow;
-//		int col = defaultCol;		
-//		for(int i=0; i<100; i++){
-//			try {
-//				moveDefaultTile(row, col);
-//			} catch (InvalidMoveException e) {				
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+	// private void generate() {
+	// int counter = 1;
+	// for (int row = 0; row < rowCount; row++) {
+	// for (int col = 0; col < columnCount; col++) {
+	// tiles[row][col] = new Tile();
+	// tiles[row][col].setNumber(counter);
+	// counter++;
+	// }
+	// }
+	// tiles[rowCount - 1][columnCount - 1].setNumber(-1);
+	// getDefaultTilePosition();
+	// shuffle();
+	// }
+	//
+	// private void shuffle(){
+	// int row = defaultRow;
+	// int col = defaultCol;
+	// for(int i=0; i<100; i++){
+	// try {
+	// moveDefaultTile(row, col);
+	// } catch (InvalidMoveException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
 
 	/**
 	 * Moves the tile to the specified row and column
@@ -291,4 +292,14 @@ public class Field implements Serializable {
 		}
 		return f.toString();
 	}
+
+	public int getPlayingSeconds() {
+		return (int) ((System.currentTimeMillis() - startMillis) / 1000);
+	}
+
+	public int getScore() {
+		int score = rowCount * columnCount * 10 - getPlayingSeconds();
+		return score < 0 ? 0 : score;
+	}
+
 }

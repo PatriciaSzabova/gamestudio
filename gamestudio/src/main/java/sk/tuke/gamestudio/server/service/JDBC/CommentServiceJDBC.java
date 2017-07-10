@@ -22,7 +22,7 @@ public class CommentServiceJDBC implements CommentService {
 
 	@Override
 	public void addComment(Comment comment) throws CommentException {
-		insertToDb(comment);
+		//insertToDb(comment);
 	}
 
 	@Override
@@ -31,18 +31,18 @@ public class CommentServiceJDBC implements CommentService {
 		return comments;
 	}
 
-	private void insertToDb(Comment comment) {
-		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
-				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(INSERT_QUERY)) {
-			pstm.setString(1, comment.getPlayer());
-			pstm.setString(2, comment.getGame());
-			pstm.setString(3, comment.getComment());
-			pstm.setDate(4, comment.getCommentedon());
-			pstm.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void insertToDb(Comment comment) {
+//		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
+//				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(INSERT_QUERY)) {
+//			pstm.setString(1, comment.getPlayer());
+//			pstm.setString(2, comment.getGame());
+//			pstm.setString(3, comment.getComment());
+//			pstm.setDate(4, comment.getCommentedon());
+//			pstm.execute();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	private void selectFromDB(String game) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,

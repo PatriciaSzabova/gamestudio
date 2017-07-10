@@ -23,7 +23,7 @@ public class ScoreServiceJDBC implements ScoreService {
 
 	@Override
 	public void addScore(Score score) throws ScoreException {
-		insertToDb(score);
+		// insertToDb(score);
 	}
 
 	@Override
@@ -34,18 +34,20 @@ public class ScoreServiceJDBC implements ScoreService {
 		return scores;
 	}
 
-	private void insertToDb(Score score) {
-		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
-				DatabaseSettings.PASSWORD); PreparedStatement pstm = connection.prepareStatement(INSERT_QUERY)) {
-			pstm.setString(1, score.getPlayer());
-			pstm.setString(2, score.getGame());
-			pstm.setInt(3, score.getPoints());
-			pstm.setDate(4, score.getPlayedon());
-			pstm.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	// private void insertToDb(Score score) {
+	// try (Connection connection =
+	// DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,
+	// DatabaseSettings.PASSWORD); PreparedStatement pstm =
+	// connection.prepareStatement(INSERT_QUERY)) {
+	// pstm.setString(1, score.getPlayer());
+	// pstm.setString(2, score.getGame());
+	// pstm.setInt(3, score.getPoints());
+	// pstm.setDate(4, score.getPlayedon());
+	// pstm.execute();
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	private void selectFromDB(String game) {
 		try (Connection connection = DriverManager.getConnection(DatabaseSettings.URL, DatabaseSettings.USER,

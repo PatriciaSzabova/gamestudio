@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="login_bar">
+    <h1><a href="/index">GameStudio</a></h1>
+
+    <p th:if="${@userController.loggedUser != null}">
+        Logged user is <span th:text="${@userController.loggedUser.username}"></span>. You can <a href="/logout">log out here</a>.
+    </p>
+
+    <p th:if="${@userController.loggedUser == null}">
+        No one is logged. You can <a href="/user">log in here</a>.
+    </p>
+</div>
+
+</body>
+</html>

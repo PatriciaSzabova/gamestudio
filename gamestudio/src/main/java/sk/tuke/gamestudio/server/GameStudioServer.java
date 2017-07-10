@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import sk.tuke.gamestudio.server.service.CommentService;
 import sk.tuke.gamestudio.server.service.RatingService;
 import sk.tuke.gamestudio.server.service.ScoreService;
+import sk.tuke.gamestudio.server.service.UserService;
 import sk.tuke.gamestudio.server.service.JPA.CommentServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.RatingServiceJPA;
 import sk.tuke.gamestudio.server.service.JPA.ScoreServiceJPA;
+import sk.tuke.gamestudio.server.service.JPA.UserServiceJPA;
 
 @Configuration
 @SpringBootApplication
@@ -33,6 +35,11 @@ public class GameStudioServer {
 	@Bean
 	public RatingService ratingService(){
 		return new RatingServiceJPA();
+	}
+	
+	@Bean
+	public UserService userService(){
+		return new UserServiceJPA();
 	}
 
 }
