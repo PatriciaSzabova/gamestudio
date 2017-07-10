@@ -9,6 +9,10 @@
 
 	<h1>Pexeso</h1>
 	<p th:utext='${pexesoController.renderField()}' />
+	<div th:text='${pexesoController.message}'></div>
+	<br>
+	<a href="?command=new">New Game</a>
+	</br>
 
 </body>
 </html>

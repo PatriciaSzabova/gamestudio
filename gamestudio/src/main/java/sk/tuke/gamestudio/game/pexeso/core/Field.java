@@ -14,11 +14,8 @@ public class Field {
 	private int opened;
 	Tile firstOpened;
 	Tile secondOpened;
-	private int firstOpenedRow;
-	private int firstOpenedCol;
-	private int secondOpenedRow;
-	private int secondOpenedCol;
 	boolean isPair;
+	int openedPairs;
 
 	private GameState gameState = GameState.PLAYING;
 
@@ -104,32 +101,24 @@ public class Field {
 	}
 
 	public void openTile(int row, int column) {
+
+		closeAllTiles();
 		Tile tile = tiles[row][column];
 		if (tile.getState() == Tile.State.CLOSED) {
 			if (firstOpened == null) {
 				tile.setState(Tile.State.OPEN);
 				opened++;
 				firstOpened = tile;
-				firstOpenedRow = row;
-				firstOpenedCol = column;
-			}
-			if (secondOpened == null && firstOpened != tile) {
+			} else if (secondOpened == null && firstOpened != tile) {
 				tile.setState(Tile.State.OPEN);
 				opened++;
 				secondOpened = tile;
-				secondOpenedRow = row;
-				secondOpenedCol = column;
+				if (isSolved()) {
+					gameState = GameState.SOLVED;
+					return;
+				}
 			}
 		}
-		if (opened == 2) {
-			if (checkPairs(firstOpened, secondOpened)) {
-				firstOpened.setState(Tile.State.SOLVED);
-				secondOpened.setState(Tile.State.SOLVED);
-			}
-			closeAllTiles();
-			opened = 0;
-		}
-
 	}
 
 	private boolean checkPairs(Tile t1, Tile t2) {
@@ -139,32 +128,30 @@ public class Field {
 		return false;
 	}
 
-	// private void fixTile(int row, int column){
-	// Tile tile = tiles[row][column];
-	// tile.setState(Tile.State.WAITING);
-	// }
-
-	private void closeTile(int row, int column) {
-		Tile tile = tiles[row][column];
-		if (tile.getState() == Tile.State.OPEN) {
-			tile.setState(Tile.State.CLOSED);
-		}
-	}
-
 	private void closeAllTiles() {
-		closeTile(firstOpenedRow, firstOpenedCol);
-		closeTile(secondOpenedRow, secondOpenedCol);
+		if (opened == 2) {
+			if (checkPairs(firstOpened, secondOpened)) {
+				firstOpened.setState(Tile.State.SOLVED);
+				secondOpened.setState(Tile.State.SOLVED);
+				openedPairs++;
+			}
+			opened = 0;
+			for (int row = 0; row < rowCount; row++) {
+				for (int col = 0; col < columnCount; col++) {
+					Tile tile = tiles[row][col];
+					if (tile.getState() == Tile.State.OPEN) {
+						tile.setState(Tile.State.CLOSED);
+					}
+				}
+			}
+			firstOpened = null;
+			secondOpened = null;
+		}
+
 	}
 
 	private boolean isSolved() {
-		for (int row = 0; row < rowCount; row++) {
-			for (int col = 0; col < columnCount; col++) {
-				if (tiles[row][col].getState() != Tile.State.SOLVED) {
-					return false;
-				}
-			}
-		}
-		return true;
+		return ((rowCount * columnCount) / 2) - 1 == openedPairs;
 	}
 
 }

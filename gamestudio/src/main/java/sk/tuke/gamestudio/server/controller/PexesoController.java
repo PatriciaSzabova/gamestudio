@@ -6,8 +6,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.pexeso.core.Field;
 import sk.tuke.gamestudio.game.pexeso.core.Tile;
 
@@ -16,11 +18,36 @@ import sk.tuke.gamestudio.game.pexeso.core.Tile;
 public class PexesoController {
 
 	private Field field = new Field(3, 4);
+	private String message = "";
 
 	@RequestMapping("/pexeso")
-	public String pexeso(Model model) {
+	public String pexeso(@RequestParam(name = "command", required = false) String command,
+			@RequestParam(name = "row", required = false) String row,
+			@RequestParam(name = "column", required = false) String column, Model model) {
+		message = "";
+		if (command != null) {
+			if ("new".equals(command)) {
+				field = new Field(3, 4);
+			}
+		} else {
+			try {
+				int rowInt = Integer.parseInt(row);
+				int colInt = Integer.parseInt(column);
+				field.openTile(rowInt, colInt);
+			} catch (NumberFormatException e) {
+				// e.printStackTrace();
+			}
+			if(field.getGameState() == GameState.SOLVED){
+				message = "Congratulations. You have won! :)";
+			}
+		}
+
 		model.addAttribute("pexesoController", this);
 		return "pexeso";
+	}
+	
+	public String getMessage() {
+		return message;
 	}
 
 	public String renderField() {

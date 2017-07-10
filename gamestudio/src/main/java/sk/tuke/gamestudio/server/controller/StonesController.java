@@ -9,21 +9,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import sk.tuke.gamestudio.game.GameState;
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
 import sk.tuke.gamestudio.game.kamene.core.Tile;
-
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public class StonesController {
 
 	private Field field = new Field(4, 4);
+	private String message = "";
 
 	@RequestMapping("/stones")
 	public String Stones(@RequestParam(name = "command", required = false) String command,
 			@RequestParam(name = "row", required = false) String row,
 			@RequestParam(name = "column", required = false) String column, Model model) {
+		message = "";
 		if (command != null) {
 			if ("new".equals(command)) {
 				field = new Field(4, 4);
@@ -38,9 +40,16 @@ public class StonesController {
 			} catch (InvalidMoveException e) {
 				// e.printStackTrace();
 			}
+			if (field.getGameState() == GameState.SOLVED) {
+				message = "Congratulations. You have won! :)";
+			}
 		}
 		model.addAttribute("stonesController", this);
 		return "stones";
+	}
+
+	public String getMessage() {
+		return message;
 	}
 
 	public String renderField() {
@@ -52,7 +61,7 @@ public class StonesController {
 				String image = getImageName(field.getTile(row, col));
 				formatter.format("<td>");
 				formatter.format("<a href='?row=%d&column=%d'>", row, col);
-				formatter.format("<img src='/images/stones/%s.png'>", image);				
+				formatter.format("<img src='/images/stones/%s.png'>", image);
 				formatter.format("</a>");
 				formatter.format("</td>");
 			}
@@ -62,10 +71,10 @@ public class StonesController {
 		formatter.format("</table>");
 		return formatter.toString();
 	}
-	
+
 	private String getImageName(Tile tile) {
 		int number = tile.getNumber();
-		if(tile.getNumber() == -1){
+		if (tile.getNumber() == -1) {
 			return "default";
 		}
 		return Integer.toString(number);
