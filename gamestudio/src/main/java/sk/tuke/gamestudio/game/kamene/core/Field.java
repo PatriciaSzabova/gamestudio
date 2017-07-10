@@ -153,6 +153,32 @@ public class Field implements Serializable {
 		tiles[rowOfLast][colOfLast].setNumber(-1);
 	}
 
+//	private void generate() {
+//		int counter = 1;
+//		for (int row = 0; row < rowCount; row++) {
+//			for (int col = 0; col < columnCount; col++) {
+//				tiles[row][col] = new Tile();
+//				tiles[row][col].setNumber(counter);
+//				counter++;
+//			}
+//		}
+//		tiles[rowCount - 1][columnCount - 1].setNumber(-1);
+//		getDefaultTilePosition();
+//		shuffle();
+//	}
+//	
+//	private void shuffle(){
+//		int row = defaultRow;
+//		int col = defaultCol;		
+//		for(int i=0; i<100; i++){
+//			try {
+//				moveDefaultTile(row, col);
+//			} catch (InvalidMoveException e) {				
+//				e.printStackTrace();
+//			}
+//		}
+//	}
+
 	/**
 	 * Moves the tile to the specified row and column
 	 * 

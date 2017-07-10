@@ -4,10 +4,20 @@ public class Tile {
 
 	public enum State {
 		OPEN,
-		CLOSED
+		CLOSED,
+		SOLVED
 	}
 	
 	private State state = State.CLOSED;
+	private int value;		
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
 
 	public State getState() {
 		return state;

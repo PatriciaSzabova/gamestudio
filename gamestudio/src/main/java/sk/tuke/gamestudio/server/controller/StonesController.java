@@ -11,6 +11,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
+import sk.tuke.gamestudio.game.kamene.core.Tile;
+
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
@@ -47,9 +49,10 @@ public class StonesController {
 		for (int row = 0; row < field.getRowCount(); row++) {
 			formatter.format("<tr>");
 			for (int col = 0; col < field.getColumnCount(); col++) {
+				String image = getImageName(field.getTile(row, col));
 				formatter.format("<td>");
 				formatter.format("<a href='?row=%d&column=%d'>", row, col);
-				formatter.format("%3s", field.getTile(row, col).toString());
+				formatter.format("<img src='/images/stones/%s.png'>", image);				
 				formatter.format("</a>");
 				formatter.format("</td>");
 			}
@@ -58,6 +61,14 @@ public class StonesController {
 		}
 		formatter.format("</table>");
 		return formatter.toString();
+	}
+	
+	private String getImageName(Tile tile) {
+		int number = tile.getNumber();
+		if(tile.getNumber() == -1){
+			return "default";
+		}
+		return Integer.toString(number);
 	}
 
 }
