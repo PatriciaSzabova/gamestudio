@@ -24,18 +24,10 @@ import sk.tuke.gamestudio.server.service.ScoreService;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
-public class StonesController {
+public class StonesController extends GameController {
 
 	private Field field = new Field(4, 4);
 	private String message = "";
-	@Autowired
-	private ScoreService scoreService;
-	@Autowired
-	private UserController userController;
-	@Autowired
-	private CommentService commentService;
-	@Autowired
-	private RatingService ratingService;
 
 	@RequestMapping("/stones")
 	public String Stones(@RequestParam(name = "command", required = false) String command,
@@ -52,32 +44,25 @@ public class StonesController {
 				int colInt = Integer.parseInt(column);
 				field.moveDefaultTile(rowInt, colInt);
 			} catch (NumberFormatException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			} catch (InvalidMoveException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
 			if (field.getGameState() == GameState.SOLVED) {
 				message = "Congratulations. You have won! :)";
-				try {
-					scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "STONES",
-							field.getScore(), new Date()));
-				} catch (ScoreException e) {
-					// e.printStackTrace();
+				if (this.getUserController().isLogged()) {
+					try {
+						this.getScoreService()
+								.addScore(new Score(this.getUserController().getLoggedUser().getUsername(), "STONES",
+										field.getScore(), new Date()));
+					} catch (ScoreException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
-		try {
-			model.addAttribute("scores", scoreService.getBestScores("STONES"));
-		} catch (ScoreException e) {
-			e.printStackTrace();
-		}
-		try {
-			model.addAttribute("comments", commentService.getComments("STONES"));
-		} catch (CommentException e) {
-			e.printStackTrace();
-		}
-		model.addAttribute("stonesController", this);
-		model.addAttribute("game", "stones");
+		this.setDataToModel("STONES", model);
+		model.addAttribute("game", "STONES");
 		return "game";
 	}
 
@@ -93,7 +78,7 @@ public class StonesController {
 			for (int col = 0; col < field.getColumnCount(); col++) {
 				String image = getImageName(field.getTile(row, col));
 				formatter.format("<td>");
-				formatter.format("<a href='?row=%d&column=%d'>", row, col);
+				formatter.format("<a href='/stones?row=%d&column=%d'>", row, col);
 				formatter.format("<img src='/images/stones/%s.png'>", image);
 				formatter.format("</a>");
 				formatter.format("</td>");

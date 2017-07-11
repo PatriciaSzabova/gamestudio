@@ -27,20 +27,12 @@ import sk.tuke.gamestudio.server.service.ScoreService;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
-public class MinesController {
+public class MinesController extends GameController {
 
 	private Field field = new Field(9, 9, 10);
 
 	private boolean marking;
 	private String message = "";
-	@Autowired
-	private ScoreService scoreService;
-	@Autowired
-	private UserController userController;
-	@Autowired
-	private CommentService commentService;
-	@Autowired
-	private RatingService ratingService;
 
 	@RequestMapping("/minesweeper")
 	public String mines(@RequestParam(name = "command", required = false) String command,
@@ -63,7 +55,7 @@ public class MinesController {
 					field.openTile(rowInt, colInt);
 				}
 			} catch (NumberFormatException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
 
 			if (field.getState() != GameState.PLAYING) {
@@ -71,29 +63,20 @@ public class MinesController {
 					message = "You have failed :(";
 				} else {
 					message = "Congratulations. You have won! :)";
-					if (userController.isLogged()) {
+					if (this.getUserController().isLogged()) {
 						try {
-							scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "MINESWEEPER",
-									field.getScore(), new Date()));
+							this.getScoreService()
+									.addScore(new Score(this.getUserController().getLoggedUser().getUsername(),
+											"MINESWEEPER", field.getScore(), new Date()));
 						} catch (ScoreException e) {
-							//e.printStackTrace();
+							e.printStackTrace();
 						}
 					}
 				}
 			}
 		}
-		try {
-			model.addAttribute("scores", scoreService.getBestScores("MINESWEEPER"));
-		} catch (ScoreException e) {
-			e.printStackTrace();
-		}
-		try {
-			model.addAttribute("comments", commentService.getComments("MINESWEEPER"));
-		} catch (CommentException e) {
-			e.printStackTrace();
-		}
-		model.addAttribute("minesController", this);
-		model.addAttribute("game", "mines");
+		this.setDataToModel("MINESWEEPER", model);
+		model.addAttribute("game", "MINESWEEPER");
 		return "game";
 	}
 
@@ -105,7 +88,7 @@ public class MinesController {
 			for (int column = 0; column < field.getColumnCount(); column++) {
 				formatter.format("<td>");
 				String image = getImageName(field.getTile(row, column));
-				formatter.format("<a href='?row=%d&column=%d'>", row, column);
+				formatter.format("<a href='/minesweeper?row=%d&column=%d'>", row, column);
 				formatter.format("<img src='/images/mines/%s.png'>", image);
 				formatter.format("</a>");
 				formatter.format("</td>");

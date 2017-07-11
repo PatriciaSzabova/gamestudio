@@ -24,18 +24,10 @@ import sk.tuke.gamestudio.server.service.ScoreService;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
-public class PexesoController {
+public class PexesoController extends GameController {
 
 	private Field field = new Field(3, 4);
 	private String message = "";
-	@Autowired
-	private ScoreService scoreService;
-	@Autowired
-	private UserController userController;
-	@Autowired
-	private CommentService commentService;
-	@Autowired
-	private RatingService ratingService;
 
 	@RequestMapping("/pexeso")
 	public String pexeso(@RequestParam(name = "command", required = false) String command,
@@ -52,32 +44,25 @@ public class PexesoController {
 				int colInt = Integer.parseInt(column);
 				field.openTile(rowInt, colInt);
 			} catch (NumberFormatException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 			}
 			if (field.getGameState() == GameState.SOLVED) {
 				message = "Congratulations. You have won! :)";
-				try {
-					scoreService.addScore(new Score(userController.getLoggedUser().getUsername(), "PEXESO",
-							field.getScore(), new Date()));
-				} catch (ScoreException e) {
-					// e.printStackTrace();
+				if (this.getUserController().isLogged()) {
+					try {
+						this.getScoreService()
+								.addScore(new Score(this.getUserController().getLoggedUser().getUsername(), "PEXESO",
+										field.getScore(), new Date()));
+
+					} catch (ScoreException e) {
+						e.printStackTrace();
+					}
 				}
 
 			}
 		}
-		try {
-			model.addAttribute("scores", scoreService.getBestScores("PEXESO"));
-		} catch (ScoreException e) {
-			e.printStackTrace();
-		}
-		try {
-			model.addAttribute("comments", commentService.getComments("PEXESO"));
-		} catch (CommentException e) {
-			e.printStackTrace();
-		}
-
-		model.addAttribute("pexesoController", this);
-		model.addAttribute("game", "pexeso");
+		this.setDataToModel("PEXESO", model);
+		model.addAttribute("game", "PEXESO");
 		return "game";
 	}
 
@@ -93,7 +78,7 @@ public class PexesoController {
 			for (int col = 0; col < field.getColumnCount(); col++) {
 				String image = getImageName(field.getTile(row, col));
 				formatter.format("<td>");
-				formatter.format("<a href='?row=%d&column=%d'>", row, col);
+				formatter.format("<a href='/pexeso?row=%d&column=%d'>", row, col);
 				formatter.format("<img src='/images/pexeso/%s.png'>", image);
 				formatter.format("</a>");
 				formatter.format("</td>");

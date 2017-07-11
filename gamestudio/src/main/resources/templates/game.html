@@ -16,12 +16,18 @@
 			<span th:text="${score.points}"></span></li>
 	</ol>
 	<h3>Comments:</h3>
+	<form action="/comment" method="post">
+		<input type="hidden" name="game" th:value="${game}" /> <input
+			type="text" name="comment" /> <input type="submit" value="OK" />
+	</form>
 	<ol>
-		<li th:each="comment : ${comments}"><span th:text="${comment.player}"></span>
-			<br><span th:text="${comment.comment}"></span></br><span th:text="${comment.commentedon}"></span></li>
+		<li th:each="comment : ${comments}"><span
+			th:text="${comment.player}"></span> <br>
+		<span th:text="${comment.comment}"></span></br>
+		<span th:text="${comment.commentedon}"></span></li>
 	</ol>
 	<h3>Rating:</h3>
-	
+
 
 </body>
 </html>
