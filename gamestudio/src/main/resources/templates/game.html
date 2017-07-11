@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Game</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="/css/stylesheet.css" />
+</head>
+<body>
+	<div th:replace="header::login_bar" />
+
+	<div th:replace="${game}::game" />
+
+	<h3>Score:</h3>
+	<ol>
+		<li th:each="score : ${scores}"><span th:text="${score.player}"></span>
+			<span th:text="${score.points}"></span></li>
+	</ol>
+	<h3>Comments:</h3>
+	<ol>
+		<li th:each="comment : ${comments}"><span th:text="${comment.player}"></span>
+			<br><span th:text="${comment.comment}"></span></br><span th:text="${comment.commentedon}"></span></li>
+	</ol>
+	<h3>Rating:</h3>
+	
+
+</body>
+</html>

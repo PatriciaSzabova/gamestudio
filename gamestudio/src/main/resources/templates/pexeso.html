@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" href="/css/stylesheet.css" />
-<title>Pexeso</title>
-</head>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <body>
-	<div th:replace="header::login_bar" />
-	<h1>Pexeso</h1>
-	<p th:utext='${pexesoController.renderField()}' />
-	<div th:text='${pexesoController.message}'></div>
-	<br>
-	<a href="?command=new">New Game</a>
-	</br>
-
+	<div th:fragment="game">
+		<h1>Pexeso</h1>
+		<p th:utext='${pexesoController.renderField()}' />
+		<div th:text='${pexesoController.message}'></div>
+		<br> <a href="?command=new">New Game</a> </br>
+	</div>
 </body>
 </html>

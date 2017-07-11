@@ -18,6 +18,10 @@ import sk.tuke.gamestudio.game.minesweeper.core.Clue;
 import sk.tuke.gamestudio.game.minesweeper.core.Field;
 import sk.tuke.gamestudio.game.minesweeper.core.Tile;
 import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
+import sk.tuke.gamestudio.server.service.RatingException;
+import sk.tuke.gamestudio.server.service.RatingService;
 import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.ScoreService;
 
@@ -33,6 +37,10 @@ public class MinesController {
 	private ScoreService scoreService;
 	@Autowired
 	private UserController userController;
+	@Autowired
+	private CommentService commentService;
+	@Autowired
+	private RatingService ratingService;
 
 	@RequestMapping("/minesweeper")
 	public String mines(@RequestParam(name = "command", required = false) String command,
@@ -79,8 +87,14 @@ public class MinesController {
 		} catch (ScoreException e) {
 			e.printStackTrace();
 		}
+		try {
+			model.addAttribute("comments", commentService.getComments("MINESWEEPER"));
+		} catch (CommentException e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("minesController", this);
-		return "mines";
+		model.addAttribute("game", "mines");
+		return "game";
 	}
 
 	public String renderField() {

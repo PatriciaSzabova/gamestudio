@@ -1,6 +1,7 @@
 package sk.tuke.gamestudio.server.service.JPA;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -14,8 +15,14 @@ public class UserServiceJPA implements UserService {
 
 	@Override
 	public User login(String username, String passwd) {
-		return (User) entityManager.createNamedQuery("User.login").setParameter("username", username)
-				.setParameter("passwd", passwd).getSingleResult();
+		User user = null;
+		try {
+			user = (User) entityManager.createNamedQuery("User.login").setParameter("username", username)
+					.setParameter("passwd", passwd).getSingleResult();
+		} catch (NoResultException e) {
+			// e.printStackTrace();
+		}
+		return user;
 	}
 
 	@Override

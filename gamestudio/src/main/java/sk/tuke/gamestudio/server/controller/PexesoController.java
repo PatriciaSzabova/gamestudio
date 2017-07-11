@@ -16,6 +16,9 @@ import sk.tuke.gamestudio.game.pexeso.core.Field;
 import sk.tuke.gamestudio.game.pexeso.core.Tile;
 import sk.tuke.gamestudio.server.entity.Score;
 import sk.tuke.gamestudio.server.entity.User;
+import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
+import sk.tuke.gamestudio.server.service.RatingService;
 import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.ScoreService;
 
@@ -29,6 +32,10 @@ public class PexesoController {
 	private ScoreService scoreService;
 	@Autowired
 	private UserController userController;
+	@Autowired
+	private CommentService commentService;
+	@Autowired
+	private RatingService ratingService;
 
 	@RequestMapping("/pexeso")
 	public String pexeso(@RequestParam(name = "command", required = false) String command,
@@ -58,9 +65,20 @@ public class PexesoController {
 
 			}
 		}
+		try {
+			model.addAttribute("scores", scoreService.getBestScores("PEXESO"));
+		} catch (ScoreException e) {
+			e.printStackTrace();
+		}
+		try {
+			model.addAttribute("comments", commentService.getComments("PEXESO"));
+		} catch (CommentException e) {
+			e.printStackTrace();
+		}
 
 		model.addAttribute("pexesoController", this);
-		return "pexeso";
+		model.addAttribute("game", "pexeso");
+		return "game";
 	}
 
 	public String getMessage() {

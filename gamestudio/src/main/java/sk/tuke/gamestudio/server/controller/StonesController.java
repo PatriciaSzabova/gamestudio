@@ -16,6 +16,9 @@ import sk.tuke.gamestudio.game.kamene.core.Field;
 import sk.tuke.gamestudio.game.kamene.core.InvalidMoveException;
 import sk.tuke.gamestudio.game.kamene.core.Tile;
 import sk.tuke.gamestudio.server.entity.Score;
+import sk.tuke.gamestudio.server.service.CommentException;
+import sk.tuke.gamestudio.server.service.CommentService;
+import sk.tuke.gamestudio.server.service.RatingService;
 import sk.tuke.gamestudio.server.service.ScoreException;
 import sk.tuke.gamestudio.server.service.ScoreService;
 
@@ -29,6 +32,10 @@ public class StonesController {
 	private ScoreService scoreService;
 	@Autowired
 	private UserController userController;
+	@Autowired
+	private CommentService commentService;
+	@Autowired
+	private RatingService ratingService;
 
 	@RequestMapping("/stones")
 	public String Stones(@RequestParam(name = "command", required = false) String command,
@@ -59,8 +66,19 @@ public class StonesController {
 				}
 			}
 		}
+		try {
+			model.addAttribute("scores", scoreService.getBestScores("STONES"));
+		} catch (ScoreException e) {
+			e.printStackTrace();
+		}
+		try {
+			model.addAttribute("comments", commentService.getComments("STONES"));
+		} catch (CommentException e) {
+			e.printStackTrace();
+		}
 		model.addAttribute("stonesController", this);
-		return "stones";
+		model.addAttribute("game", "stones");
+		return "game";
 	}
 
 	public String getMessage() {
